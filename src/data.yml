@@ -1,0 +1,10 @@
+#This file stores the data for players
+#UUID:
+#  currency: 5000
+#  maps:
+#    mapinternalname:
+#      unlocked: true
+#      attempts: 0
+#      finishes: 0
+#      # Defaults to -1
+#     besttime: -1

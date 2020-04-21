@@ -1,0 +1,21 @@
+name: NetherCubeElytra
+main: com.gmail.justbru00.nethercube.elytra.main.NetherCubeElytra
+version: 1.2.2
+authors: [JustBru00,Justin Brubaker]
+softdepend: [HolographicDisplays,PlaceholderAPI]
+commands:
+  elytra:
+    description: Command for opening gui.
+    aliases: [ely]
+  elytraadmin:
+    description: The command for admin/test features.
+    aliases: [elyadmin]
+  elytrabalance:
+    description: Command to view your current elytra currency balance.
+    aliases: [elybal]   
+  elytralobby:
+    description: Command to teleport to the elytra lobby and leave the current map.
+    aliases: [elylobby] 
+  elytratp:
+    description: Teleports a player to the specified map. It won't work if they don't own the map.
+    aliases: [elytp]
