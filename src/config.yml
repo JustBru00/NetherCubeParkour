@@ -1,6 +1,6 @@
-# NetherCubeElytra by JustBru00
+# NetherCubeParkour by JustBru00
 
-prefix: '&8[&cNether&6Cube&fElytra&8] &6'
+prefix: '&8[&cNether&6Cube&fParkour&8] &6'
 
 lobbylocation:
   world: world
