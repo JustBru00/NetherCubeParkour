@@ -31,7 +31,7 @@ public class GUIManager {
 	
 	public static void init() {
 		
-		borderGlass = new ItemBuilder(Material.STAINED_GLASS_PANE).setDataValue(7).setName("&r").build();
+		borderGlass = new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE).setName("&r").build();
 		okay = new ItemBuilder(Material.EMERALD_BLOCK).setName("&a&lOkay").build();
 		cancel = new ItemBuilder(Material.REDSTONE_BLOCK).setName("&c&lCancel").build();
 		cannotAffordMap = new ItemBuilder(Material.BARRIER).setName("&c&lYou can't afford that map").build();

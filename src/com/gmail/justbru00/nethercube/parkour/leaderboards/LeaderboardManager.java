@@ -145,7 +145,9 @@ public class LeaderboardManager {
 		HashMap<UUID, Long> dataMap = new HashMap<UUID, Long>();
 		
 		for (PlayerData v : allTheData) {
-			dataMap.put(v.getUuid(), v.getMapData(mapInternalName).getBestTime());
+			if (v.getMapData(mapInternalName).getBestTime() != -1) {
+				dataMap.put(v.getUuid(), v.getMapData(mapInternalName).getBestTime());
+			}			
 		}
 		// Get the top ten
 		Map<UUID, Long> topTen = dataMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.naturalOrder()))

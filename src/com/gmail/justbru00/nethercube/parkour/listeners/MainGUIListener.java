@@ -23,8 +23,8 @@ public class MainGUIListener implements Listener {
 	public void onInventoryClick(InventoryClickEvent e) {
 		
 		if (e.getInventory() != null) {
-			if (e.getInventory().getName() != null) {
-				if (e.getInventory().getName().startsWith(Messager.color("&6Currency: "))) {
+			if (e.getView().getTitle() != null) {
+				if (e.getView().getTitle().startsWith(Messager.color("&6Currency: "))) {
 					// Is the main GUI 
 					e.setCancelled(true);
 					
@@ -51,7 +51,7 @@ public class MainGUIListener implements Listener {
 						
 						// Not unlocked
 						
-						if (e.getClickedInventory().getName().startsWith(Messager.color("&6Currency: "))) {
+						if (e.getView().getTitle().startsWith(Messager.color("&6Currency: "))) {
 							// Make sure the item clicked is from the mainGUI
 							if (!e.getCurrentItem().equals(GUIManager.getBorderGlass())) {
 								// Item is not the border glass

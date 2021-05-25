@@ -17,7 +17,7 @@ public class PressurePlateTriggerListener implements Listener {
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
 		if(e.getAction().equals(Action.PHYSICAL)) {
-			if (e.getClickedBlock().getType() == Material.STONE_PLATE) {
+			if (e.getClickedBlock().getType() == Material.STONE_PRESSURE_PLATE) {
 				Player p = e.getPlayer();
 				BlockState state = e.getClickedBlock().getState();
 				

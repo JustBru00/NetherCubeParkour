@@ -1,8 +1,9 @@
 name: NetherCubeParkour
 main: com.gmail.justbru00.nethercube.parkour.main.NetherCubeParkour
-version: 1.2.2
+version: 1.3-INDEV
 authors: [JustBru00,Justin Brubaker]
-softdepend: [HolographicDisplays,PlaceholderAPI]
+softdepend: [HolographicDisplays]
+api-version: 1.16
 commands:
   parkour:
     description: Command for opening gui.
@@ -19,3 +20,9 @@ commands:
   parkourtp:
     description: Teleports a player to the specified map. It won't work if they don't own the map.
     aliases: [prktp]
+  parkourstart:
+    description: Starts the given course for the given player.
+  parkourstop:
+    description: Ends the given course for the given player.    
+  boatkill:
+    description: Kills all boats that do not have players riding in them.  

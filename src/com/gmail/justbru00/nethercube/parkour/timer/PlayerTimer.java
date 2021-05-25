@@ -63,7 +63,7 @@ public class PlayerTimer {
 				}
 				
 			}
-		}, 20, 20);
+		}, 5, 5);
 	}
 	
 	/**
@@ -92,6 +92,20 @@ public class PlayerTimer {
 	 * @param m
 	 */
 	public static void playerStartingMap(OfflinePlayer p, Map m) {
+		if (m == null) {
+			Messager.debug("A NULL map was provided to the #playerStartingMap()");
+			return;
+		} else if (!p.isOnline()) {
+			Messager.debug("A player was provided to MapManager#playerStartingMap() that isn't online. How did that happen?");
+			return;
+		}
+		
+		Player online = p.getPlayer();
+		if (online.getVehicle() == null) {
+			Messager.debug("Player was not in a boat. Can't start time");
+			return;
+		}
+		
 		playerMapStartTime.put(p.getUniqueId(), Instant.now());
 		playersInMaps.put(p.getUniqueId(), m);
 		
@@ -127,6 +141,11 @@ public class PlayerTimer {
 			return;
 		}
 		
+		if (p.getVehicle() == null) {
+			Messager.debug("Player wasn't in a boat");
+			return;
+		}
+		
 		PlayerData pd = PlayerData.getDataFor(p);
 		PlayerMapData pmd = pd.getMapData(m.getInternalName());
 		
@@ -153,7 +172,7 @@ public class PlayerTimer {
 		}
 		
 		// GIVE REWARD FOR THIS MAP AND TELL PLAYER HOW MUCH IT WAS
-		int reward = 0;
+		/*int reward = 0;
 		Map map = MapManager.getMap(pmd.getInternalName());
 		if (pmd.getFinishes() == 0) {
 			reward = map.getRewardAmount();
@@ -170,21 +189,21 @@ public class PlayerTimer {
 			
 		if (reward <= 0) {
 			reward = 0;
-		}
+		}*/
 		
 		// Add one finish to the stats
 		pmd.setFinishes(pmd.getFinishes() + 1);		
 		
-		pd.setCurrency(pd.getCurrency() + reward);
+		//pd.setCurrency(pd.getCurrency() + reward);
 		pd.save();
-		Messager.msgPlayer("&6You received &a" + reward + " &6currency for completing the map.", p);
+		//Messager.msgPlayer("&6You received &a" + reward + " &6currency for completing the map.", p);
 		
 		// Remove player from the HashMaps
 		playersInMaps.remove(p.getUniqueId());
 		playerMapStartTime.remove(p.getUniqueId());
 		
 		// Teleport the player to the elytra lobby
-		p.teleport(LOBBY_LOCATION, TeleportCause.PLUGIN);
+		// p.teleport(LOBBY_LOCATION, TeleportCause.PLUGIN);
 	}
 	
 }

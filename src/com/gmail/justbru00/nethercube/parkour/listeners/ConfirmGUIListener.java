@@ -21,7 +21,7 @@ public class ConfirmGUIListener implements Listener {
 		
 		if (e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
 			
-			if (e.getInventory().getName().equals(Messager.color("&6Confirm Purchase"))) {
+			if (e.getView().getTitle().equals(Messager.color("&6Confirm Purchase"))) {
 				e.setCancelled(true);
 				
 				ItemStack mapItem = e.getInventory().getItem(22);

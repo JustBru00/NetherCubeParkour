@@ -28,15 +28,12 @@ import java.util.concurrent.TimeUnit;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import com.gmail.justbru00.nethercube.parkour.main.NetherCubeParkour;
 
-import net.minecraft.server.v1_12_R1.ChatMessageType;
-import net.minecraft.server.v1_12_R1.IChatBaseComponent;
-import net.minecraft.server.v1_12_R1.PacketPlayOutChat;
-import net.minecraft.server.v1_12_R1.IChatBaseComponent.ChatSerializer;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 
 public class Messager {
@@ -52,9 +49,7 @@ public class Messager {
 	 */
 	public static void sendActionBar(String msg, Player player) {
 		msg = Messager.color(msg);
-		IChatBaseComponent cbc = ChatSerializer.a("{\"text\": \"" + msg + "\"}");
-        PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, ChatMessageType.GAME_INFO);       
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(ppoc);
+		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
 	}
 	
 	public static void msgConsole(String msg) {		
