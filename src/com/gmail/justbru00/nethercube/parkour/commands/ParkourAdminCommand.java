@@ -61,9 +61,9 @@ public class ParkourAdminCommand implements CommandExecutor {
 					
 					UUID id = null;
 					try {
-						id = UUID.fromString(args[2]);
+						id = UUID.fromString(potentialUuid);
 					} catch (IllegalArgumentException e) {
-						Messager.msgSender("&cUhh... " + args[2] + " doesn't appear to be properly formatted UUID string. Fix that please. It really helps my sanity.", sender);
+						Messager.msgSender("&cUhh... " + potentialUuid+ " doesn't appear to be properly formatted UUID string. Fix that please. It really helps my sanity.", sender);
 						return true;
 					}
 					
