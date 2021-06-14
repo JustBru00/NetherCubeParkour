@@ -43,6 +43,42 @@ public class ParkourAdminCommand implements CommandExecutor {
 					Messager.msgSender("&6/parkouradmin updateleaderboards", sender);
 					Messager.msgSender("&6/parkouradmin reload", sender);
 					return true;
+				} else if (args[0].equalsIgnoreCase("resetbesttime")) {
+					// ISSUE #1
+					// /parkouradmin resetbesttime <playerUuid> <map>
+					if (args.length != 3) {
+						Messager.msgSender("&cSorry you didn't provide the correct arguments. /parkouradmin resetbesttime <playerUuid> <mapName>", sender);
+						return true;
+					} 
+					
+					String potentialUuid = args[1];
+					String potentialMapName = args[2];
+					
+					if (potentialUuid.length() != 36) {
+						Messager.msgSender("&cUhh... " + potentialUuid + " doesn't appear to be properly formatted UUID string. Fix that please. It really helps my sanity.", sender);
+						return true;
+					}
+					
+					UUID id = null;
+					try {
+						id = UUID.fromString(args[2]);
+					} catch (IllegalArgumentException e) {
+						Messager.msgSender("&cUhh... " + args[2] + " doesn't appear to be properly formatted UUID string. Fix that please. It really helps my sanity.", sender);
+						return true;
+					}
+					
+					PlayerData pd = PlayerData.getDataFor(Bukkit.getOfflinePlayer(id));
+					
+					if (pd.getMapData(potentialMapName) == null) {
+						Messager.msgSender("&cI can't find that map in the given players userdata. Are you sure you typed it correctly?", sender);
+						return true;
+					}
+					
+					pd.getMapData(potentialMapName).setBestTime(-1L);
+					pd.save();
+					Messager.msgSender("&aSuccessfully reset the best time for " + id.toString() + " on the map " + potentialMapName + ".", sender);
+					
+					return true;
 				} else if (args[0].equals("currency") || args[0].equalsIgnoreCase("cur")) {
 					if (args.length >= 3) {
 					
