@@ -7,21 +7,10 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.gmail.justbru00.nethercube.parkour.commands.BoatKillCommand;
-import com.gmail.justbru00.nethercube.parkour.commands.ParkourAdminCommand;
-import com.gmail.justbru00.nethercube.parkour.commands.ParkourBalanceCommand;
-import com.gmail.justbru00.nethercube.parkour.commands.ParkourCommand;
-import com.gmail.justbru00.nethercube.parkour.commands.ParkourLobbyCommand;
-import com.gmail.justbru00.nethercube.parkour.commands.ParkourStartCommand;
-import com.gmail.justbru00.nethercube.parkour.commands.ParkourStopCommand;
-import com.gmail.justbru00.nethercube.parkour.commands.ParkourTpCommand;
+import com.gmail.justbru00.nethercube.parkour.commands.*;
 import com.gmail.justbru00.nethercube.parkour.gui.GUIManager;
 import com.gmail.justbru00.nethercube.parkour.leaderboards.LeaderboardManager;
-import com.gmail.justbru00.nethercube.parkour.listeners.ConfirmGUIListener;
-import com.gmail.justbru00.nethercube.parkour.listeners.IceTrackListener;
-import com.gmail.justbru00.nethercube.parkour.listeners.MainGUIListener;
-import com.gmail.justbru00.nethercube.parkour.listeners.PressurePlateTriggerListener;
-import com.gmail.justbru00.nethercube.parkour.listeners.WorldLeaveListener;
+import com.gmail.justbru00.nethercube.parkour.listeners.*;
 import com.gmail.justbru00.nethercube.parkour.map.MapManager;
 import com.gmail.justbru00.nethercube.parkour.timer.PlayerTimer;
 import com.gmail.justbru00.nethercube.parkour.utils.Messager;
@@ -84,7 +73,6 @@ public class NetherCubeParkour extends JavaPlugin {
 		pm.registerEvents(new MainGUIListener(), instance);
 		pm.registerEvents(new ConfirmGUIListener(), instance);
 		pm.registerEvents(new PressurePlateTriggerListener(), instance);
-		pm.registerEvents(new WorldLeaveListener(), instance);
 		pm.registerEvents(new IceTrackListener(), instance);
 		
 	}
