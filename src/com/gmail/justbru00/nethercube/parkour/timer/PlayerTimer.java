@@ -16,8 +16,9 @@ import com.gmail.justbru00.nethercube.parkour.data.PlayerData;
 import com.gmail.justbru00.nethercube.parkour.data.PlayerMapData;
 import com.gmail.justbru00.nethercube.parkour.main.NetherCubeParkour;
 import com.gmail.justbru00.nethercube.parkour.map.Map;
-import com.gmail.justbru00.nethercube.parkour.map.MapManager;
 import com.gmail.justbru00.nethercube.parkour.utils.Messager;
+
+import java.util.Optional;
 
 public class PlayerTimer {
 
@@ -64,6 +65,19 @@ public class PlayerTimer {
 				
 			}
 		}, 5, 5);
+	}
+	
+	/**
+	 * This method will return a map if the player is currently in one.
+	 * @param p
+	 * @return
+	 */
+	public static Optional<Map> getMapPlayerIsIn(Player p) {
+		if (playersInMaps.containsKey(p.getUniqueId())) {
+			return Optional.of(playersInMaps.get(p.getUniqueId()));
+		}
+		
+		return Optional.empty();
 	}
 	
 	/**

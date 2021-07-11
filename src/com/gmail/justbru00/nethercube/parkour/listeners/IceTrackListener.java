@@ -1,5 +1,7 @@
 package com.gmail.justbru00.nethercube.parkour.listeners;
 
+import java.util.Optional;
+
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -17,6 +19,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import com.gmail.justbru00.nethercube.parkour.map.Map;
 import com.gmail.justbru00.nethercube.parkour.timer.PlayerTimer;
 import com.gmail.justbru00.nethercube.parkour.utils.ItemBuilder;
 import com.gmail.justbru00.nethercube.parkour.utils.Messager;
@@ -92,18 +95,38 @@ public class IceTrackListener implements Listener {
 			}
 			
 			if (inHand.getItemMeta().getDisplayName().startsWith(Messager.color("&cRestart Map "))) {
-				// RESTART MAP
-				PlayerTimer.playerLeavingMap(e.getPlayer(), false);
 				Player p = e.getPlayer();
-				
-				Entity entity = p.getVehicle();
-				
-				if (entity != null) {
-					entity.remove();
-				}
-				
-				e.getPlayer().teleport(PlayerTimer.LOBBY_LOCATION, TeleportCause.PLUGIN);
-				return;
+				// What map are we in?
+				Optional<Map> possibleMap = PlayerTimer.getMapPlayerIsIn(p);
+				if (possibleMap.isPresent()) {
+					// Player is currently playing a map.
+					PlayerTimer.playerLeavingMap(p, false);
+					
+					// Remove the boat the player might be in.
+					Entity entity = p.getVehicle();
+					
+					if (entity != null) {
+						entity.remove();
+					}
+					Map currentMap = possibleMap.get();
+					
+					p.teleport(currentMap.getSpawnLocation(), TeleportCause.PLUGIN);				
+					return;
+				} else {
+					// Player isn't currently playing a map.
+					// Calling this method shouldn't be necessary, but I am going to call it anyway, just to clean up anything that shouldn't be in the HashMaps. 
+					PlayerTimer.playerLeavingMap(p, false);				
+					
+					// Remove the boat the player might be in.
+					Entity entity = p.getVehicle();
+					
+					if (entity != null) {
+						entity.remove();
+					}
+					
+					p.teleport(PlayerTimer.LOBBY_LOCATION, TeleportCause.PLUGIN);
+					return;
+				}						
 			} 
 		}
 	}	
