@@ -181,7 +181,7 @@ public class PlayerTimer {
 		}
 		
 		if (p.getVehicle().getUniqueId() != startingBoatUuid) {
-			Messager.msgPlayer("&cYou finished the map in a different one than you started in. I can't accept your time because of this.", p);
+			Messager.msgPlayer("&cYou finished the map in a different boat than you started in. I can't accept your time because of this.", p);
 			Messager.msgConsole(String.format("&c%s attempted to exploit the timing system by finishing in a different boat than they started in.", p.getName()));
 			// Remove player from the HashMaps
 			playersInMaps.remove(p.getUniqueId());
