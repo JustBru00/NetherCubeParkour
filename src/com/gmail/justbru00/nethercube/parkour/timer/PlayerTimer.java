@@ -24,11 +24,14 @@ public class PlayerTimer {
 
 	private static HashMap<UUID, Map> playersInMaps = new HashMap<UUID, Map>();
 	private static HashMap<UUID, Instant> playerMapStartTime = new HashMap<UUID, Instant>();
-	public static Location LOBBY_LOCATION;
+	private static HashMap<UUID, UUID> playersInMapsBoatUuids = new HashMap<UUID, UUID>();
 	
+	public static Location LOBBY_LOCATION;
+		
 	public static void init() {
 		playersInMaps = new HashMap<UUID, Map>();
 		playerMapStartTime = new HashMap<UUID, Instant>();
+		playersInMapsBoatUuids = new HashMap<UUID, UUID>();
 		
 		FileConfiguration config = NetherCubeParkour.getInstance().getConfig();
 		// Load lobby location
@@ -88,6 +91,7 @@ public class PlayerTimer {
 	public static void playerLeavingMap(Player p, boolean teleportToLobby) {
 		playerMapStartTime.remove(p.getUniqueId());
 		playersInMaps.remove(p.getUniqueId());
+		playersInMapsBoatUuids.remove(p.getUniqueId());
 		
 		if (teleportToLobby) {
 			// Teleport the player to the elytra lobby
@@ -119,9 +123,11 @@ public class PlayerTimer {
 			Messager.debug("Player was not in a boat. Can't start time");
 			return;
 		}
+		UUID boatUuid = online.getVehicle().getUniqueId();
 		
 		playerMapStartTime.put(p.getUniqueId(), Instant.now());
 		playersInMaps.put(p.getUniqueId(), m);
+		playersInMapsBoatUuids.put(p.getUniqueId(), boatUuid);
 		
 		// Add one attempt to the stats
 		PlayerData pd = PlayerData.getDataFor(p);
@@ -157,13 +163,35 @@ public class PlayerTimer {
 		
 		if (p.getVehicle() == null) {
 			Messager.debug("Player wasn't in a boat");
+			// Remove player from the HashMaps
+			playersInMaps.remove(p.getUniqueId());
+			playerMapStartTime.remove(p.getUniqueId());
+			playersInMapsBoatUuids.remove(p.getUniqueId());
+			return;
+		}
+		
+		UUID startingBoatUuid = playersInMapsBoatUuids.get(p.getUniqueId());
+		if (startingBoatUuid == null) {
+			Messager.debug("Player doesn't have starting boat uuid.");
+			// Remove player from the HashMaps
+			playersInMaps.remove(p.getUniqueId());
+			playerMapStartTime.remove(p.getUniqueId());
+			playersInMapsBoatUuids.remove(p.getUniqueId());
+			return;
+		}
+		
+		if (p.getVehicle().getUniqueId() != startingBoatUuid) {
+			Messager.msgPlayer("&cYou finished the map in a different one than you started in. I can't accept your time because of this.", p);
+			Messager.msgConsole(String.format("&c%s attempted to exploit the timing system by finishing in a different boat than they started in.", p.getName()));
+			// Remove player from the HashMaps
+			playersInMaps.remove(p.getUniqueId());
+			playerMapStartTime.remove(p.getUniqueId());
+			playersInMapsBoatUuids.remove(p.getUniqueId());
 			return;
 		}
 		
 		PlayerData pd = PlayerData.getDataFor(p);
-		PlayerMapData pmd = pd.getMapData(m.getInternalName());
-		
-		
+		PlayerMapData pmd = pd.getMapData(m.getInternalName());		
 		
 		long mapTime = Duration.between(playerMapStartTime.get(p.getUniqueId()), endTime).toMillis();
 		
@@ -215,6 +243,7 @@ public class PlayerTimer {
 		// Remove player from the HashMaps
 		playersInMaps.remove(p.getUniqueId());
 		playerMapStartTime.remove(p.getUniqueId());
+		playersInMapsBoatUuids.remove(p.getUniqueId());
 		
 		// Teleport the player to the elytra lobby
 		// p.teleport(LOBBY_LOCATION, TeleportCause.PLUGIN);
