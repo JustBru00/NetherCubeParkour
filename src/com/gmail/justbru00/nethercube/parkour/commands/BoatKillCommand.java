@@ -1,6 +1,7 @@
 package com.gmail.justbru00.nethercube.parkour.commands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,15 +18,17 @@ public class BoatKillCommand implements CommandExecutor {
 		if (sender.hasPermission("parkour.boatkill")) {
 			long numberOfBoats = 0;
 			
-			for (Entity e : Bukkit.getWorld("world").getEntities()) {
-				if (e.getType().equals(EntityType.BOAT)) {
-					if (e.isEmpty()) {
-						// No passengers
-						e.remove();
-						numberOfBoats++;
-					}
-				}				
-			}
+			for (World w : Bukkit.getWorlds()) {
+				for (Entity e : w.getEntities()) {
+					if (e.getType().equals(EntityType.BOAT)) {
+						if (e.isEmpty()) {
+							// No passengers
+							e.remove();
+							numberOfBoats++;
+						}
+					}				
+				}
+			}		
 			
 			Messager.msgSender("&aRemoved " + numberOfBoats + " boats.", sender);
 			
