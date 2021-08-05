@@ -1,6 +1,10 @@
 package com.gmail.justbru00.nethercube.parkour.listeners;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.HashMap;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -29,6 +33,9 @@ import com.gmail.justbru00.nethercube.parkour.utils.ItemBuilder;
 import com.gmail.justbru00.nethercube.parkour.utils.Messager;
 
 public class IceTrackListener implements Listener {
+	
+	private HashMap<UUID, Instant> rateLimitList = new HashMap<UUID, Instant>();
+	private int rateLimit = 1;
 
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent e) {
@@ -76,6 +83,7 @@ public class IceTrackListener implements Listener {
 	public void onPlayerLeave(PlayerQuitEvent e) {
 		PlayerTimer.playerLeavingMap(e.getPlayer(), false);
 		Messager.debug("&cPlayer left the game");
+		rateLimitList.remove(e.getPlayer().getUniqueId());
 	}
 
 	@EventHandler
@@ -104,7 +112,7 @@ public class IceTrackListener implements Listener {
 			return;
 		}
 
-		if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+		if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getHand().equals(EquipmentSlot.HAND)) {
 			ItemStack inHand = e.getPlayer().getInventory().getItemInMainHand();
 
 			if (inHand == null || inHand.getType().equals(Material.AIR)) {
@@ -115,7 +123,23 @@ public class IceTrackListener implements Listener {
 				return;
 			}
 
-			if (inHand.getItemMeta().getDisplayName().startsWith(Messager.color("&cRestart Map "))) {
+			if (inHand.getItemMeta().getDisplayName().startsWith(Messager.color("&cRestart Map "))) {				
+				// Rate limit
+				UUID id = e.getPlayer().getUniqueId();
+				if (rateLimitList.containsKey(id)) {
+					if (Duration.between(rateLimitList.get(id), Instant.now()).getSeconds() < rateLimit) {
+						// Rate limit now.
+						Messager.msgConsole("Rate limited.");
+						return;
+					} else {
+						rateLimitList.put(id, Instant.now());
+					}
+				} else {
+					rateLimitList.put(id, Instant.now());
+				}		
+				
+				Messager.msgConsole(String.format("&cMap Item Listener Hand: %s Action: %s", e.getHand().toString(), e.getAction().toString()));
+				
 				Player p = e.getPlayer();
 				// What map are we in?
 				Optional<Map> possibleMap = PlayerTimer.getMapPlayerIsIn(p);
