@@ -128,17 +128,14 @@ public class IceTrackListener implements Listener {
 				UUID id = e.getPlayer().getUniqueId();
 				if (rateLimitList.containsKey(id)) {
 					if (Duration.between(rateLimitList.get(id), Instant.now()).getSeconds() < rateLimit) {
-						// Rate limit now.
-						Messager.msgConsole("Rate limited.");
+						// Rate limit now.						
 						return;
 					} else {
 						rateLimitList.put(id, Instant.now());
 					}
 				} else {
 					rateLimitList.put(id, Instant.now());
-				}		
-				
-				Messager.msgConsole(String.format("&cMap Item Listener Hand: %s Action: %s", e.getHand().toString(), e.getAction().toString()));
+				}					
 				
 				Player p = e.getPlayer();
 				// What map are we in?

@@ -13,8 +13,8 @@ public class ParkourCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (command.getName().equalsIgnoreCase("parkour")) {
-			if (!sender.hasPermission("nethercubeparkour.parkour")) {
+		if (command.getName().equalsIgnoreCase("courses")) {
+			if (!sender.hasPermission("nethercubeparkour.courses")) {
 				Messager.msgSender("&cSorry you don't have permission to use that command.", sender);
 				return true;
 			}

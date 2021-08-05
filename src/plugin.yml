@@ -5,9 +5,9 @@ authors: [JustBru00,Justin Brubaker]
 softdepend: [HolographicDisplays]
 api-version: 1.16
 commands:
-  parkour:
+  courses:
     description: Command for opening gui.
-    aliases: [prk]
+    aliases: [c]
   parkouradmin:
     description: The command for admin/test features.
     aliases: [prkadmin]

@@ -114,9 +114,10 @@ public class GUIManager {
 	 */
 	public static void openMainGUI(Player p) {
 		
-		PlayerData pd = PlayerData.getDataFor(p);
+		//PlayerData pd = PlayerData.getDataFor(p);
 		
-		Inventory inv = Bukkit.createInventory(null, 54, Messager.color("&6Currency: " + pd.getCurrency()));
+		//Inventory inv = Bukkit.createInventory(null, 54, Messager.color("&6Currency: " + pd.getCurrency()));
+		Inventory inv = Bukkit.createInventory(null, 54, Messager.color("&6Courses: "));
 		
 		// Set the border glass
 		// 0-9, 10,18,19,27,28,36,37,45,46-54 minus one for all these

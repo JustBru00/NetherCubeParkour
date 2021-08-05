@@ -24,7 +24,8 @@ public class MainGUIListener implements Listener {
 		
 		if (e.getInventory() != null) {
 			if (e.getView().getTitle() != null) {
-				if (e.getView().getTitle().startsWith(Messager.color("&6Currency: "))) {
+				//if (e.getView().getTitle().startsWith(Messager.color("&6Currency: "))) {
+				if (e.getView().getTitle().startsWith(Messager.color("&6Courses: "))) {
 					// Is the main GUI 
 					e.setCancelled(true);
 					
@@ -51,7 +52,8 @@ public class MainGUIListener implements Listener {
 						
 						// Not unlocked
 						
-						if (e.getView().getTitle().startsWith(Messager.color("&6Currency: "))) {
+						//if (e.getView().getTitle().startsWith(Messager.color("&6Currency: "))) {
+						if (e.getView().getTitle().startsWith(Messager.color("&6Courses: "))) {							
 							// Make sure the item clicked is from the mainGUI
 							if (!e.getCurrentItem().equals(GUIManager.getBorderGlass())) {
 								// Item is not the border glass

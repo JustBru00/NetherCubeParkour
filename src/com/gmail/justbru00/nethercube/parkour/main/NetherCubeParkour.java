@@ -59,7 +59,7 @@ public class NetherCubeParkour extends JavaPlugin {
 		}
 		
 		// REGISTER COMMANDS
-		getCommand("parkour").setExecutor(new ParkourCommand());
+		getCommand("courses").setExecutor(new ParkourCommand());
 		getCommand("parkouradmin").setExecutor(new ParkourAdminCommand());
 		getCommand("parkourbalance").setExecutor(new ParkourBalanceCommand());
 		getCommand("parkourlobby").setExecutor(new ParkourLobbyCommand());
