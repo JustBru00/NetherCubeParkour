@@ -76,7 +76,7 @@ public class ParkourAdminCommand implements CommandExecutor {
 					
 					int placement = 1;
 					for (Entry<UUID, Long> entry : fastestTimes.entrySet()) {
-						Messager.msgSender(String.format("#%s - %s:%s", placement + "", 
+						Messager.msgSender(String.format("#%s - %s | %s", placement + "", 
 								Bukkit.getOfflinePlayer(entry.getKey()).getName(), Messager.formatAsTime(entry.getValue())), sender);
 					 placement++;
 					}
