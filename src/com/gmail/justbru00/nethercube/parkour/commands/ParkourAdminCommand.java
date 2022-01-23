@@ -1,5 +1,6 @@
 package com.gmail.justbru00.nethercube.parkour.commands;
 
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -18,6 +19,7 @@ import com.gmail.justbru00.nethercube.parkour.map.Map;
 import com.gmail.justbru00.nethercube.parkour.map.MapManager;
 import com.gmail.justbru00.nethercube.parkour.timer.PlayerTimer;
 import com.gmail.justbru00.nethercube.parkour.utils.Messager;
+import com.gmail.justbru00.nethercube.parkour.utils.PluginFile;
 
 public class ParkourAdminCommand implements CommandExecutor {
 
@@ -38,36 +40,144 @@ public class ParkourAdminCommand implements CommandExecutor {
 			
 			if (args.length >= 1) {
 				if (args[0].equalsIgnoreCase("help")) {
+					Messager.msgSender("&6/parkouradmin resetalltimes mapName", sender);
+					Messager.msgSender("&6/parkouradmin setbesttime <playerName> <mapName> <mapTimeInMilliseconds>", sender);
+					Messager.msgSender("&6/parkouradmin top <mapName> <totalNumberOfPlayers>", sender);
+					Messager.msgSender("&6/parkouradmin resetbesttime <playerName> <mapName>", sender);					
 					Messager.msgSender("&6/parkouradmin currency <set,get,add,subtract> <playerName,UUID> (amount)", sender);
 					Messager.msgSender("&6/parkouradmin maps <list,tp> (player)", sender);
 					Messager.msgSender("&6/parkouradmin updateleaderboards", sender);
 					Messager.msgSender("&6/parkouradmin reload", sender);
 					return true;
+				} else if (args[0].equalsIgnoreCase("top")) {
+					if (args.length != 3) {
+						Messager.msgSender("&cSorry you didn't provide the correct arguments. /parkouradmin top <mapName> <totalNumberOfPlayers>", sender);
+						return true;
+					}
+					
+					Map map = MapManager.getMap(args[1]);
+					
+					if (map == null) {
+						Messager.msgSender("&cSorry I can't find the map name " + args[1] + ".", sender);
+						return true;
+					}
+					
+					String potentialLimit = args[2];
+					int limit = -1;
+					
+					try {
+						limit = Integer.parseInt(potentialLimit);
+					} catch (NumberFormatException e) {
+						Messager.msgSender("&cSorry, I can't parse a limit number from that argument.", sender);
+						return true;
+					}			
+					
+					java.util.Map<UUID, Long> fastestTimes = LeaderboardManager.getFastestTimesForMap(map.getInternalName(), limit);
+					
+					int placement = 1;
+					for (Entry<UUID, Long> entry : fastestTimes.entrySet()) {
+						Messager.msgSender(String.format("#%s - %s:%s", placement + "", 
+								Bukkit.getOfflinePlayer(entry.getKey()).getName(), Messager.formatAsTime(entry.getValue())), sender);
+					 placement++;
+					}
+					
+					Messager.msgSender("&aFinished listing fastest times", sender);
+					return true;
+				} else if (args[0].equalsIgnoreCase("resetalltimes")) {
+					// /parkouradmin resetalltimes <mapName>
+					if (args.length != 2) {
+						Messager.msgSender("&cSorry you didn't provide the correct arguments. /parkouradmin resetalltimes <mapName>", sender);
+						return true;
+					}
+					
+					Map map = MapManager.getMap(args[1]);
+					
+					if (map == null) {
+						Messager.msgSender("&cSorry I can't find the map name " + args[1] + ".", sender);
+						return true;
+					}
+					
+					PluginFile file = NetherCubeParkour.dataFile;
+					
+					for (String key : file.getKeys(false)) {
+						file.set(key + ".maps." + map.getInternalName() + ".besttime", -1L);
+					}
+					file.save();
+					
+					Messager.msgSender("&aReset all times for all players on the map " + map.getInternalName() + ".", sender);
+					return true;
+				} else if (args[0].equalsIgnoreCase("setbesttime")) {
+					// /parkouradmin setbesttime <playerName> <mapName> <mapTimeInMilliseconds>
+					if (args.length != 4) {
+						Messager.msgSender("&cSorry you didn't provide the correct arguments. /parkouradmin setbesttime <playerName> <mapName> <mapTimeInMilliseconds>", sender);
+						return true;
+					}
+					
+					String potentialPlayerName = args[1];
+					String potentialMapName = args[2];
+					
+					if (potentialPlayerName.length() > 16) {
+						Messager.msgSender("&cUhh... " + potentialPlayerName + " doesn't appear to be properly formatted player name string. Fix that please. It really helps my sanity.", sender);
+						return true;
+					}
+					
+					@SuppressWarnings("deprecation")
+					OfflinePlayer offline = Bukkit.getOfflinePlayer(potentialPlayerName);
+					
+					if(!offline.hasPlayedBefore()) {
+						// Not played before
+						Messager.msgSender("&cUhh.. that player hasn't joined the server before. Check your spelling.", sender);
+						return true;
+					}
+					
+					PlayerData pd = PlayerData.getDataFor(offline);
+					
+					if (pd.getMapData(potentialMapName) == null) {
+						Messager.msgSender("&cI can't find that map in the given players userdata. Are you sure you typed it correctly?", sender);
+						return true;
+					}
+					
+					String potentialMapTime = args[3];
+					long mapTime = -1;
+					
+					try {
+						mapTime = Long.parseLong(potentialMapTime);
+					} catch (NumberFormatException e) {
+						Messager.msgSender("&cSorry, I can't parse a number from the map time argument.", sender);
+						return true;
+					}					
+										
+					pd.getMapData(potentialMapName).setBestTime(mapTime);
+					pd.save();
+					Messager.msgSender("&aSuccessfully set the best time for " + offline.getName() + " on the map " + potentialMapName + " to " + Messager.formatAsTime(mapTime), sender);
+					
+					return true;					
 				} else if (args[0].equalsIgnoreCase("resetbesttime")) {
 					// ISSUE #1
-					// /parkouradmin resetbesttime <playerUuid> <map>
+					// /parkouradmin resetbesttime <playerName> <map>
 					if (args.length != 3) {
-						Messager.msgSender("&cSorry you didn't provide the correct arguments. /parkouradmin resetbesttime <playerUuid> <mapName>", sender);
+						Messager.msgSender("&cSorry you didn't provide the correct arguments. /parkouradmin resetbesttime <playerName> <mapName>", sender);
 						return true;
 					} 
 					
-					String potentialUuid = args[1];
+					String potentialPlayerName = args[1];
 					String potentialMapName = args[2];
 					
-					if (potentialUuid.length() != 36) {
-						Messager.msgSender("&cUhh... " + potentialUuid + " doesn't appear to be properly formatted UUID string. Fix that please. It really helps my sanity.", sender);
+					if (potentialPlayerName.length() > 16) {
+						Messager.msgSender("&cUhh... " + potentialPlayerName + " doesn't appear to be properly formatted player name string. Fix that please. It really helps my sanity.", sender);
 						return true;
 					}
 					
-					UUID id = null;
-					try {
-						id = UUID.fromString(potentialUuid);
-					} catch (IllegalArgumentException e) {
-						Messager.msgSender("&cUhh... " + potentialUuid+ " doesn't appear to be properly formatted UUID string. Fix that please. It really helps my sanity.", sender);
+					@SuppressWarnings("deprecation")
+					OfflinePlayer offline = Bukkit.getOfflinePlayer(potentialPlayerName);
+					
+					if(!offline.hasPlayedBefore()) {
+						// Not played before
+						Messager.msgSender("&cUhh.. that player hasn't joined the server before. Check your spelling.", sender);
 						return true;
 					}
 					
-					PlayerData pd = PlayerData.getDataFor(Bukkit.getOfflinePlayer(id));
+					PlayerData pd = PlayerData.getDataFor(offline);
 					
 					if (pd.getMapData(potentialMapName) == null) {
 						Messager.msgSender("&cI can't find that map in the given players userdata. Are you sure you typed it correctly?", sender);
@@ -76,7 +186,7 @@ public class ParkourAdminCommand implements CommandExecutor {
 					
 					pd.getMapData(potentialMapName).setBestTime(-1L);
 					pd.save();
-					Messager.msgSender("&aSuccessfully reset the best time for " + id.toString() + " on the map " + potentialMapName + ".", sender);
+					Messager.msgSender("&aSuccessfully reset the best time for " + offline.getName() + " on the map " + potentialMapName + ".", sender);
 					
 					return true;
 				} else if (args[0].equals("currency") || args[0].equalsIgnoreCase("cur")) {

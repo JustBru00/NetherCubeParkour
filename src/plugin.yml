@@ -1,6 +1,6 @@
 name: NetherCubeParkour
 main: com.gmail.justbru00.nethercube.parkour.main.NetherCubeParkour
-version: 1.4.2-INDEV
+version: 1.5
 authors: [JustBru00,Justin Brubaker]
 softdepend: [HolographicDisplays]
 api-version: 1.16
