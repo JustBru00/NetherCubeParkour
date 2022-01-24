@@ -25,6 +25,7 @@ public class PlayerTimer {
 	private static HashMap<UUID, Map> playersInMaps = new HashMap<UUID, Map>();
 	private static HashMap<UUID, Instant> playerMapStartTime = new HashMap<UUID, Instant>();
 	private static HashMap<UUID, UUID> playersInMapsBoatUuids = new HashMap<UUID, UUID>();
+	private static HashMap<UUID, Integer> playersCheckpointScore = new HashMap<UUID, Integer>();
 	
 	public static Location LOBBY_LOCATION;
 		
@@ -32,6 +33,7 @@ public class PlayerTimer {
 		playersInMaps = new HashMap<UUID, Map>();
 		playerMapStartTime = new HashMap<UUID, Instant>();
 		playersInMapsBoatUuids = new HashMap<UUID, UUID>();
+		playersCheckpointScore = new HashMap<UUID, Integer>();
 		
 		FileConfiguration config = NetherCubeParkour.getInstance().getConfig();
 		// Load lobby location
@@ -92,6 +94,7 @@ public class PlayerTimer {
 		playerMapStartTime.remove(p.getUniqueId());
 		playersInMaps.remove(p.getUniqueId());
 		playersInMapsBoatUuids.remove(p.getUniqueId());
+		playersCheckpointScore.remove(p.getUniqueId()); 
 		
 		if (teleportToLobby) {
 			// Teleport the player to the elytra lobby
@@ -128,6 +131,7 @@ public class PlayerTimer {
 		playerMapStartTime.put(p.getUniqueId(), Instant.now());
 		playersInMaps.put(p.getUniqueId(), m);
 		playersInMapsBoatUuids.put(p.getUniqueId(), boatUuid);
+		playersCheckpointScore.put(p.getUniqueId(), 0);
 		
 		// Add one attempt to the stats
 		PlayerData pd = PlayerData.getDataFor(p);
@@ -136,6 +140,39 @@ public class PlayerTimer {
 		pmd.setAttempts(pmd.getAttempts() + 1);
 		pd.save();
 	}
+	
+	public static void playerCheckpointMap(OfflinePlayer p, Map m) {
+		if (m == null) {
+			Messager.debug("A NULL map was provided to the #playerCheckpointMap()");
+			return;
+		} else if (!p.isOnline()) {
+			Messager.debug("A player was provided to MapManager#playerCheckpointMap() that isn't online. How did that happen?");
+			return;
+		}
+		
+		Player online = p.getPlayer();
+		if (online.getVehicle() == null) {
+			Messager.debug("Player was not in a boat. Can't give checkpoint.");
+			return;
+		}
+
+		UUID startingBoatUuid = playersInMapsBoatUuids.get(p.getUniqueId());
+		
+		if (startingBoatUuid == null) {
+			Messager.debug("Player doesn't have starting boat uuid.");
+			// Remove player from the HashMaps
+			playersInMaps.remove(p.getUniqueId());
+			playerMapStartTime.remove(p.getUniqueId());
+			playersInMapsBoatUuids.remove(p.getUniqueId());
+			playersCheckpointScore.remove(p.getUniqueId());
+			return;
+		}
+		
+		playersCheckpointScore.put(p.getUniqueId(), 1);
+		Messager.debug("Activated hidden checkpoint for " + p.getName());
+		return;
+	}
+	
 	/**
 	 * Gets the current time for a player
 	 * Useful for displaying the current time
@@ -167,6 +204,7 @@ public class PlayerTimer {
 			playersInMaps.remove(p.getUniqueId());
 			playerMapStartTime.remove(p.getUniqueId());
 			playersInMapsBoatUuids.remove(p.getUniqueId());
+			playersCheckpointScore.remove(p.getUniqueId());
 			return;
 		}
 		
@@ -177,6 +215,7 @@ public class PlayerTimer {
 			playersInMaps.remove(p.getUniqueId());
 			playerMapStartTime.remove(p.getUniqueId());
 			playersInMapsBoatUuids.remove(p.getUniqueId());
+			playersCheckpointScore.remove(p.getUniqueId());
 			return;
 		}
 		
@@ -187,8 +226,19 @@ public class PlayerTimer {
 			playersInMaps.remove(p.getUniqueId());
 			playerMapStartTime.remove(p.getUniqueId());
 			playersInMapsBoatUuids.remove(p.getUniqueId());
+			playersCheckpointScore.remove(p.getUniqueId());
 			return;
-		}
+		}		
+		
+		if (playersCheckpointScore.get(p.getUniqueId()) != null || playersCheckpointScore.get(p.getUniqueId()) != 1) {
+			Messager.msgPlayer("&cYou skipped some of the map. I can't accept your time because of this.", p);
+			Messager.msgConsole(String.format("&c%s attempted to exploit the timing system by finishing without passing the hidden checkpoint.", p.getName()));
+			// Remove player from the HashMaps
+			playersInMaps.remove(p.getUniqueId());
+			playerMapStartTime.remove(p.getUniqueId());
+			playersInMapsBoatUuids.remove(p.getUniqueId());
+			playersCheckpointScore.remove(p.getUniqueId());
+		}		
 		
 		PlayerData pd = PlayerData.getDataFor(p);
 		PlayerMapData pmd = pd.getMapData(m.getInternalName());		
@@ -211,42 +261,18 @@ public class PlayerTimer {
 			// Not the new best time
 			Messager.msgPlayer("&6You finished the map in &c" + Messager.formatAsTime(mapTime) + "&6. "
 					+ "You failed to beat your personal best of &a" + Messager.formatAsTime(pmd.getBestTime()) + "&6.", p);
-		}
-		
-		// GIVE REWARD FOR THIS MAP AND TELL PLAYER HOW MUCH IT WAS
-		/*int reward = 0;
-		Map map = MapManager.getMap(pmd.getInternalName());
-		if (pmd.getFinishes() == 0) {
-			reward = map.getRewardAmount();
-		} else if (pmd.getFinishes() == 1) {
-			reward = (int) (.75 * map.getRewardAmount());
-		} else if (pmd.getFinishes() == 2) {
-			reward = (int) (.50 * map.getRewardAmount());
-		} else if (pmd.getFinishes() == 3) {
-			reward = (int) (.25 * map.getRewardAmount());
-		} else {
-			// over 4 times finished
-			reward = 0;
-		}
-			
-		if (reward <= 0) {
-			reward = 0;
-		}*/
+		}	
 		
 		// Add one finish to the stats
-		pmd.setFinishes(pmd.getFinishes() + 1);		
-		
-		//pd.setCurrency(pd.getCurrency() + reward);
-		pd.save();
-		//Messager.msgPlayer("&6You received &a" + reward + " &6currency for completing the map.", p);
+		pmd.setFinishes(pmd.getFinishes() + 1);			
+	
+		pd.save();		
 		
 		// Remove player from the HashMaps
 		playersInMaps.remove(p.getUniqueId());
 		playerMapStartTime.remove(p.getUniqueId());
 		playersInMapsBoatUuids.remove(p.getUniqueId());
-		
-		// Teleport the player to the elytra lobby
-		// p.teleport(LOBBY_LOCATION, TeleportCause.PLUGIN);
+		playersCheckpointScore.remove(p.getUniqueId());		
 	}
 	
 }

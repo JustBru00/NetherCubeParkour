@@ -67,6 +67,7 @@ public class NetherCubeParkour extends JavaPlugin {
 		getCommand("parkourstart").setExecutor(new ParkourStartCommand());
 		getCommand("parkourstop").setExecutor(new ParkourStopCommand());
 		getCommand("boatkill").setExecutor(new BoatKillCommand());
+		getCommand("parkourcheckpoint").setExecutor(new ParkourCheckpointCommand());
 		
 		// REGISTER LISTENERS
 		PluginManager pm = Bukkit.getPluginManager();
