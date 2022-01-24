@@ -27,4 +27,4 @@ commands:
   boatkill:
     description: Kills all boats that do not have players riding in them.  
   parkourcheckpoint:
-    description: Activates madatory hidden checkpoint for the given player.  
+    description: Activates mandatory hidden checkpoint for the given player.  
