@@ -230,7 +230,7 @@ public class PlayerTimer {
 			return;
 		}		
 		
-		if (playersCheckpointScore.get(p.getUniqueId()) != null || playersCheckpointScore.get(p.getUniqueId()) != 1) {
+		if (playersCheckpointScore.get(p.getUniqueId()) == null || playersCheckpointScore.get(p.getUniqueId()) != 1) {
 			Messager.msgPlayer("&cYou skipped some of the map. I can't accept your time because of this.", p);
 			Messager.msgConsole(String.format("&c%s attempted to exploit the timing system by finishing without passing the hidden checkpoint.", p.getName()));
 			// Remove player from the HashMaps
