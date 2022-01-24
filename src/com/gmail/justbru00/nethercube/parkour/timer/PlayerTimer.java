@@ -238,6 +238,7 @@ public class PlayerTimer {
 			playerMapStartTime.remove(p.getUniqueId());
 			playersInMapsBoatUuids.remove(p.getUniqueId());
 			playersCheckpointScore.remove(p.getUniqueId());
+			return;
 		}		
 		
 		PlayerData pd = PlayerData.getDataFor(p);
