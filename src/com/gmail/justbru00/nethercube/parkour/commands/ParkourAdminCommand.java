@@ -1,6 +1,5 @@
 package com.gmail.justbru00.nethercube.parkour.commands;
 
-import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -34,56 +33,21 @@ public class ParkourAdminCommand implements CommandExecutor {
 			}
 			
 			if (args.length == 0) {
-				Messager.msgSender("&cUhh... you &omight &r&cneed to provide an argment after this command. Use /parkouradmin help for a list of arguments.", sender);
+				Messager.msgSender("&cUhh... you &omight &r&cneed to provide an argument after this command. Use /parkouradmin help for a list of arguments.", sender);
 				return true;
 			}
 			
 			if (args.length >= 1) {
 				if (args[0].equalsIgnoreCase("help")) {
 					Messager.msgSender("&6/parkouradmin resetalltimes mapName", sender);
-					Messager.msgSender("&6/parkouradmin setbesttime <playerName> <mapName> <mapTimeInMilliseconds>", sender);
-					Messager.msgSender("&6/parkouradmin top <mapName> <totalNumberOfPlayers>", sender);
+					Messager.msgSender("&6/parkouradmin setbesttime <playerName> <mapName> <mapTimeInMilliseconds>", sender);					
 					Messager.msgSender("&6/parkouradmin resetbesttime <playerName> <mapName>", sender);					
 					Messager.msgSender("&6/parkouradmin currency <set,get,add,subtract> <playerName,UUID> (amount)", sender);
 					Messager.msgSender("&6/parkouradmin maps <list,tp> (player)", sender);
 					Messager.msgSender("&6/parkouradmin updateleaderboards", sender);
 					Messager.msgSender("&6/parkouradmin reload", sender);
 					return true;
-				} else if (args[0].equalsIgnoreCase("top")) {
-					if (args.length != 3) {
-						Messager.msgSender("&cSorry you didn't provide the correct arguments. /parkouradmin top <mapName> <totalNumberOfPlayers>", sender);
-						return true;
-					}
-					
-					Map map = MapManager.getMap(args[1]);
-					
-					if (map == null) {
-						Messager.msgSender("&cSorry I can't find the map name " + args[1] + ".", sender);
-						return true;
-					}
-					
-					String potentialLimit = args[2];
-					int limit = -1;
-					
-					try {
-						limit = Integer.parseInt(potentialLimit);
-					} catch (NumberFormatException e) {
-						Messager.msgSender("&cSorry, I can't parse a limit number from that argument.", sender);
-						return true;
-					}			
-					
-					java.util.Map<UUID, Long> fastestTimes = LeaderboardManager.getFastestTimesForMap(map.getInternalName(), limit);
-					
-					int placement = 1;
-					for (Entry<UUID, Long> entry : fastestTimes.entrySet()) {
-						Messager.msgSender(String.format("#%s - %s | %s", placement + "", 
-								Bukkit.getOfflinePlayer(entry.getKey()).getName(), Messager.formatAsTime(entry.getValue())), sender);
-					 placement++;
-					}
-					
-					Messager.msgSender("&aFinished listing fastest times", sender);
-					return true;
-				} else if (args[0].equalsIgnoreCase("resetalltimes")) {
+				}  else if (args[0].equalsIgnoreCase("resetalltimes")) {
 					// /parkouradmin resetalltimes <mapName>
 					if (args.length != 2) {
 						Messager.msgSender("&cSorry you didn't provide the correct arguments. /parkouradmin resetalltimes <mapName>", sender);

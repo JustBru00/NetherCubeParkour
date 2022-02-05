@@ -31,6 +31,7 @@ public class ItemBuilder {
 		return this;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public ItemBuilder setDataValue(int i) {
 		item.setDurability((short) i);
 		return this;
