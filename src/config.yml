@@ -3,10 +3,13 @@
 prefix: '&8[&cNether&6Cube&fParkour&8] &6'
 
 lobbylocation:
+  onjoin: true
   world: world
   x: 0
   y: 0
   z: 0  
+
+prevent_inventory_movement: true  
   
 debug: false  
   

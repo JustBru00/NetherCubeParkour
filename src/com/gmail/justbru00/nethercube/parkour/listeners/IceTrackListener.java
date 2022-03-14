@@ -88,9 +88,13 @@ public class IceTrackListener implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
-		e.getPlayer().teleport(PlayerTimer.LOBBY_LOCATION, TeleportCause.PLUGIN);
+		if (NetherCubeParkour.getInstance().getConfig().getBoolean("lobbylocation.onjoin")) {
+			e.getPlayer().teleport(PlayerTimer.LOBBY_LOCATION, TeleportCause.PLUGIN);			
+		}
+		
 		e.getPlayer().getInventory().clear();
 		e.getPlayer().getInventory().setItem(4,	new ItemBuilder(Material.BARRIER).setName("&cRestart Map &7&o(Right Click)").build());
+		
 	}
 
 	@EventHandler
@@ -99,7 +103,9 @@ public class IceTrackListener implements Listener {
 			return;
 		}
 
-		e.setCancelled(true);
+		if (NetherCubeParkour.getInstance().getConfig().getBoolean("prevent_inventory_movement")) {
+			e.setCancelled(true);
+		}		
 	}
 
 	@EventHandler
