@@ -20,13 +20,14 @@ public class Map {
 	private Location startPlateLocation;
 	private Location endingPlateLocation;
 	private Location spawnLocation;
+	private boolean requiresCheckpoint;
 	
 	public Map(String internalName) {
 		this.internalName = internalName;
 	}
 	
 	public Map(String internalName, ItemStack guiItem, MapDifficulty difficulty, MapLength length, String creatorName,
-			int rewardAmount, int purchaseCost, Location startPlateLocation, Location endingPlateLocation) {
+			int rewardAmount, int purchaseCost, Location startPlateLocation, Location endingPlateLocation, boolean requiresCheckpoint) {
 		super();
 		this.internalName = internalName;
 		this.guiItem = guiItem;
@@ -37,6 +38,7 @@ public class Map {
 		this.purchaseCost = purchaseCost;
 		this.startPlateLocation = startPlateLocation;
 		this.endingPlateLocation = endingPlateLocation;
+		this.requiresCheckpoint = requiresCheckpoint;
 	}	
 	/**
 	 * Gets the spawnpoint for this map
@@ -104,7 +106,12 @@ public class Map {
 	public void setEndingPlateLocation(Location endingPlateLocation) {
 		this.endingPlateLocation = endingPlateLocation;
 	}
-	
-	
-	
+
+	public boolean doesRequiresCheckpoint() {
+		return requiresCheckpoint;
+	}
+
+	public void setRequiresCheckpoint(boolean requiresCheckpoint) {
+		this.requiresCheckpoint = requiresCheckpoint;
+	}	
 }

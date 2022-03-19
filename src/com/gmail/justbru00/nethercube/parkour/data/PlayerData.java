@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
+import com.gmail.justbru00.nethercube.parkour.main.NetherCubeParkour;
 import com.gmail.justbru00.nethercube.parkour.map.Map;
 import com.gmail.justbru00.nethercube.parkour.map.MapManager;
 
@@ -39,7 +41,7 @@ public class PlayerData {
 				dataFile.set(pathPre + map.getInternalName() + ".finishes", 0);
 				dataFile.set(pathPre + map.getInternalName() + ".besttime", (long) -1);
 			}	
-			dataFile.save();
+			dataFile.save();			
 		}
 		
 		// Get all data from config.
@@ -103,7 +105,16 @@ public class PlayerData {
 			dataFile.set(prePath + pmd.getInternalName() + ".finishes", pmd.getFinishes());
 			dataFile.set(prePath + pmd.getInternalName() + ".besttime", pmd.getBestTime());
 		}
-		dataFile.save();
+		//dataFile.save();
+		Bukkit.getScheduler().runTaskAsynchronously(NetherCubeParkour.getInstance(), PlayerData::saveToDisk);
+	}
+	
+	/**
+	 * This method is a syncronized method to make sure all data is saved and we don't lose anything.
+	 * All changes are saved in order.
+	 */
+	private static synchronized void saveToDisk() {		
+		dataFile.save();			
 	}
 	
 	public PlayerMapData getMapData(String internalName) {

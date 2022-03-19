@@ -63,6 +63,7 @@ maps:
     length: 'SHORT'
     creatorname: 'ItsLlfe'
     rewardamount: 50
+    requirescheckpoint: true
     # Purchase cost. -1 for unlocked by default
     purchasecost: 100
     startlocation:

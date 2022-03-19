@@ -41,6 +41,11 @@ public class MapManager {
 			m.setLength(MapLength.fromString(c.getString("maps." + mapKey +".length")));
 			m.setPurchaseCost(c.getInt(prePath + "purchasecost"));
 			m.setRewardAmount(c.getInt(prePath + "rewardamount"));
+			boolean checkpoint = c.getBoolean(prePath + "requirescheckpoint");
+			if (!checkpoint) {
+				Messager.msgConsole("&6[MapManager] Map '" + mapKey + "' doesn't have checkpoints enabled. If you want to change this please add 'requirescheckpoint: true` to the configuration section for this map.");
+			}
+			m.setRequiresCheckpoint(checkpoint);
 			Location start;
 			Location end;
 			Location spawnpoint;

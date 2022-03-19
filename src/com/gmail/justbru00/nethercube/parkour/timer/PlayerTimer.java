@@ -133,7 +133,7 @@ public class PlayerTimer {
 		playersInMapsBoatUuids.put(p.getUniqueId(), boatUuid);
 		playersCheckpointScore.put(p.getUniqueId(), 0);
 		
-		// Add one attempt to the stats
+		// Add one attempt to the stats 
 		PlayerData pd = PlayerData.getDataFor(p);
 		PlayerMapData pmd = pd.getMapData(m.getInternalName());
 		
@@ -169,7 +169,7 @@ public class PlayerTimer {
 		}
 		
 		playersCheckpointScore.put(p.getUniqueId(), 1);
-		Messager.debug("Activated hidden checkpoint for " + p.getName());
+		Messager.debug("&6[PlayerTimer] Activated hidden checkpoint for " + p.getName());
 		return;
 	}
 	
@@ -230,16 +230,18 @@ public class PlayerTimer {
 			return;
 		}		
 		
-		if (playersCheckpointScore.get(p.getUniqueId()) == null || playersCheckpointScore.get(p.getUniqueId()) != 1) {
-			Messager.msgPlayer("&cYou skipped some of the map. I can't accept your time because of this.", p);
-			Messager.msgConsole(String.format("&c%s attempted to exploit the timing system by finishing without passing the hidden checkpoint.", p.getName()));
-			// Remove player from the HashMaps
-			playersInMaps.remove(p.getUniqueId());
-			playerMapStartTime.remove(p.getUniqueId());
-			playersInMapsBoatUuids.remove(p.getUniqueId());
-			playersCheckpointScore.remove(p.getUniqueId());
-			return;
-		}		
+		if (m.doesRequiresCheckpoint()) {
+			if (playersCheckpointScore.get(p.getUniqueId()) == null || playersCheckpointScore.get(p.getUniqueId()) != 1) {
+				Messager.msgPlayer("&cYou skipped some of the map. I can't accept your time because of this.", p);
+				Messager.msgConsole(String.format("&c%s attempted to exploit the timing system by finishing without passing the hidden checkpoint.", p.getName()));
+				// Remove player from the HashMaps
+				playersInMaps.remove(p.getUniqueId());
+				playerMapStartTime.remove(p.getUniqueId());
+				playersInMapsBoatUuids.remove(p.getUniqueId());
+				playersCheckpointScore.remove(p.getUniqueId());
+				return;
+			}		
+		}
 		
 		PlayerData pd = PlayerData.getDataFor(p);
 		PlayerMapData pmd = pd.getMapData(m.getInternalName());		
@@ -250,14 +252,12 @@ public class PlayerTimer {
 			// The default value is still saved. This is the new best time.
 			Messager.msgPlayer("&6You finished the map in &a" + Messager.formatAsTime(mapTime) + "&6. That is your new personal best!", p);
 			// Save new best time
-			pmd.setBestTime(mapTime);
-			pd.save();
+			pmd.setBestTime(mapTime);			
 		} else if (mapTime < pmd.getBestTime()) {
 			// This is the new best time
 			Messager.msgPlayer("&6You finished the map in &a" + Messager.formatAsTime(mapTime) + "&6. That is your new personal best! You beat your previous best time of &c"
 					+ Messager.formatAsTime(pmd.getBestTime()) + "&6.", p);
-			pmd.setBestTime(mapTime);
-			pd.save();
+			pmd.setBestTime(mapTime);			
 		} else {
 			// Not the new best time
 			Messager.msgPlayer("&6You finished the map in &c" + Messager.formatAsTime(mapTime) + "&6. "
