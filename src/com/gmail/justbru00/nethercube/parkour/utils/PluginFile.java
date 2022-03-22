@@ -36,6 +36,20 @@ public class PluginFile extends YamlConfiguration {
         this.file = new File(plugin.getDataFolder(), fileName);
         reload();
     }
+    
+    /**
+     * My addition to the PluginFile class. 
+     * This method allows you to pass a {@link File} instead of a file name.
+     * Make sure your path is inside the server directory or you might have issues.
+     * @param plugin
+     * @param file
+     */
+    public PluginFile(JavaPlugin plugin, File file) {
+    	this.plugin = plugin;
+    	this.defaults = null;
+    	this.file = file;
+    	reload();
+    }
    
     /**
      * Reload configuration
