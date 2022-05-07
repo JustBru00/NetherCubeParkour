@@ -48,14 +48,16 @@ public class IceTrackListener implements Listener {
 			LivingEntity le = e.getExited();
 			if (le instanceof Player) {
 				Player p = (Player) le;
-				// If the vehicleexit is from a boat and the entity is a player
+				// If the vehicle exit is from a boat and the entity is a player
 				Messager.msgConsole(String.format("&7Player %s left their boat %s", p.getName(), v.getUniqueId()));
 				PlayerTimer.playerLeavingMap(p, false);
 				Bukkit.getScheduler().scheduleSyncDelayedTask(NetherCubeParkour.getInstance(), new Runnable() {
 					
 					@Override
 					public void run() {
-						v.remove();					
+						if (v != null) {
+							v.remove();
+						}											
 					}
 				}, 5);
 			}
@@ -75,8 +77,13 @@ public class IceTrackListener implements Listener {
 
 			@Override
 			public void run() {
-				e.getPlayer().getInventory().clear();
-				e.getPlayer().getInventory().setItem(4,	new ItemBuilder(Material.BARRIER).setName("&cRestart Map &7&o(Right Click)").build());
+				if (NetherCubeParkour.getInstance().getConfig().getBoolean("clear_player_inventory_on_join")) {
+					e.getPlayer().getInventory().clear();
+				}
+				
+				if (NetherCubeParkour.getInstance().getConfig().getBoolean("give_barrier_block_to_middle_slot_on_hotbar")) {		
+					e.getPlayer().getInventory().setItem(4,	new ItemBuilder(Material.BARRIER).setName("&cRestart Map &7&o(Right Click)").build());
+				}	
 			}
 		}, 5);
 	}
@@ -118,9 +125,13 @@ public class IceTrackListener implements Listener {
 			e.getPlayer().teleport(PlayerTimer.LOBBY_LOCATION, TeleportCause.PLUGIN);			
 		}
 		
-		e.getPlayer().getInventory().clear();
-		e.getPlayer().getInventory().setItem(4,	new ItemBuilder(Material.BARRIER).setName("&cRestart Map &7&o(Right Click)").build());
+		if (NetherCubeParkour.getInstance().getConfig().getBoolean("clear_player_inventory_on_join")) {
+			e.getPlayer().getInventory().clear();
+		}
 		
+		if (NetherCubeParkour.getInstance().getConfig().getBoolean("give_barrier_block_to_middle_slot_on_hotbar")) {		
+			e.getPlayer().getInventory().setItem(4,	new ItemBuilder(Material.BARRIER).setName("&cRestart Map &7&o(Right Click)").build());
+		}		
 	}
 
 	@EventHandler

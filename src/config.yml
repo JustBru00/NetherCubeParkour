@@ -10,6 +10,8 @@ lobbylocation:
   z: 0  
 
 prevent_inventory_movement: true  
+clear_player_inventory_on_join: true
+give_barrier_block_to_middle_slot_on_hotbar: true
   
 debug: false  
   

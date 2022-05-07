@@ -77,6 +77,11 @@ public class NetherCubeParkour extends JavaPlugin {
 		pm.registerEvents(new PressurePlateTriggerListener(), instance);
 		pm.registerEvents(new IceTrackListener(), instance);
 		
+		// NOTIFY CONSOLE ABOUT CURRENT SETTINGS
+		Messager.msgConsole("&6Teleport to lobby on join: " + getConfig().getBoolean("lobbylocation.onjoin"));
+		Messager.msgConsole("&6Prevent inventory movement: " + getConfig().getBoolean("prevent_inventory_movement"));
+		Messager.msgConsole("&6Clear player inventory on join: " + getConfig().getBoolean("clear_player_inventory_on_join"));
+		Messager.msgConsole("&6Give players barrier block: " + getConfig().getBoolean("give_barrier_block_to_middle_slot_on_hotbar"));
 	}
 	
 	public static NetherCubeParkour getInstance() {
