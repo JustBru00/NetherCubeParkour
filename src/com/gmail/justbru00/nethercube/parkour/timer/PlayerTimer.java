@@ -24,7 +24,7 @@ public class PlayerTimer {
 
 	private static HashMap<UUID, Map> playersInMaps = new HashMap<UUID, Map>();
 	private static HashMap<UUID, Instant> playerMapStartTime = new HashMap<UUID, Instant>();
-	private static HashMap<UUID, UUID> playersInMapsBoatUuids = new HashMap<UUID, UUID>();
+	public static HashMap<UUID, UUID> playersInMapsBoatUuids = new HashMap<UUID, UUID>();
 	private static HashMap<UUID, Integer> playersCheckpointScore = new HashMap<UUID, Integer>();
 	
 	public static Location LOBBY_LOCATION;

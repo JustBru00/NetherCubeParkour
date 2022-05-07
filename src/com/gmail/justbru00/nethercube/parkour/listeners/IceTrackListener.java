@@ -12,7 +12,10 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Gate;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -23,6 +26,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
@@ -37,6 +41,28 @@ public class IceTrackListener implements Listener {
 	private HashMap<UUID, Instant> rateLimitList = new HashMap<UUID, Instant>();
 	private int rateLimit = 1;
 
+	@EventHandler
+	public void onBoatExitEvent(VehicleExitEvent e) {
+		final Vehicle v = e.getVehicle();
+		if (v.getType() == EntityType.BOAT) {
+			LivingEntity le = e.getExited();
+			if (le instanceof Player) {
+				Player p = (Player) le;
+				// If the vehicleexit is from a boat and the entity is a player
+				Messager.msgConsole(String.format("&7Player %s left their boat %s", p.getName(), v.getUniqueId()));
+				PlayerTimer.playerLeavingMap(p, false);
+				Bukkit.getScheduler().scheduleSyncDelayedTask(NetherCubeParkour.getInstance(), new Runnable() {
+					
+					@Override
+					public void run() {
+						v.remove();					
+					}
+				}, 5);
+			}
+		}
+	}
+	
+	
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent e) {
 		PlayerTimer.playerLeavingMap(e.getEntity(), false);
