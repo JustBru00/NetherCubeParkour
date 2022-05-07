@@ -50,16 +50,7 @@ public class IceTrackListener implements Listener {
 				Player p = (Player) le;
 				// If the vehicle exit is from a boat and the entity is a player
 				Messager.msgConsole(String.format("&7Player %s left their boat %s", p.getName(), v.getUniqueId()));
-				PlayerTimer.playerLeavingMap(p, false);
-				Bukkit.getScheduler().scheduleSyncDelayedTask(NetherCubeParkour.getInstance(), new Runnable() {
-					
-					@Override
-					public void run() {
-						if (v != null) {
-							v.remove();
-						}											
-					}
-				}, 5);
+				PlayerTimer.playerLeavingMap(p, false);				
 			}
 		}
 	}
