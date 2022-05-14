@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import com.gmail.justbru00.nethercube.parkour.data.PlayerData;
 import com.gmail.justbru00.nethercube.parkour.data.PlayerMapData;
+import com.gmail.justbru00.nethercube.parkour.leaderboards.LeaderboardManager;
 import com.gmail.justbru00.nethercube.parkour.main.NetherCubeParkour;
 import com.gmail.justbru00.nethercube.parkour.map.Map;
 import com.gmail.justbru00.nethercube.parkour.utils.Messager;
@@ -250,18 +251,24 @@ public class PlayerTimer {
 		
 		if (pmd.getBestTime() == -1) {
 			// The default value is still saved. This is the new best time.
-			Messager.msgPlayer("&6You finished the map in &a" + Messager.formatAsTime(mapTime) + "&6. That is your new personal best!", p);
+			Messager.msgPlayer("&6You finished the map in &a&l&n" + Messager.formatAsTime(mapTime) + "&6. That is your new personal best!", p);
 			// Save new best time
 			pmd.setBestTime(mapTime);			
 		} else if (mapTime < pmd.getBestTime()) {
 			// This is the new best time
-			Messager.msgPlayer("&6You finished the map in &a" + Messager.formatAsTime(mapTime) + "&6. That is your new personal best! You beat your previous best time of &c"
+			Messager.msgPlayer("&6You finished the map in &a&l&n" + Messager.formatAsTime(mapTime) + "&6. That is your new personal best! You beat your previous best time of &c"
 					+ Messager.formatAsTime(pmd.getBestTime()) + "&6.", p);
 			pmd.setBestTime(mapTime);			
 		} else {
 			// Not the new best time
-			Messager.msgPlayer("&6You finished the map in &c" + Messager.formatAsTime(mapTime) + "&6. "
-					+ "You failed to beat your personal best of &a" + Messager.formatAsTime(pmd.getBestTime()) + "&6.", p);
+			int placement = LeaderboardManager.getCachedLeaderboardPositionOnMap(m.getInternalName(), p.getUniqueId());
+			if (placement > 0) {
+				Messager.msgPlayer("&6You finished the map in &c&l&n" + Messager.formatAsTime(mapTime) + "&6. "
+						+ "You failed to beat your personal best of &a" + Messager.formatAsTime(pmd.getBestTime()) + " [#"+ placement + "]&6.", p);
+			} else {
+				Messager.msgPlayer("&6You finished the map in &c&l&n" + Messager.formatAsTime(mapTime) + "&6. "
+						+ "You failed to beat your personal best of &a" + Messager.formatAsTime(pmd.getBestTime()) + "&6.", p);
+			}			
 		}	
 		
 		// Add one finish to the stats
