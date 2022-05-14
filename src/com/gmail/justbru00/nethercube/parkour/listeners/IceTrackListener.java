@@ -2,6 +2,7 @@ package com.gmail.justbru00.nethercube.parkour.listeners;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,6 +31,7 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import com.gmail.justbru00.nethercube.parkour.leaderboards.LeaderboardManager;
 import com.gmail.justbru00.nethercube.parkour.main.NetherCubeParkour;
 import com.gmail.justbru00.nethercube.parkour.map.Map;
 import com.gmail.justbru00.nethercube.parkour.timer.PlayerTimer;
@@ -122,7 +124,19 @@ public class IceTrackListener implements Listener {
 		
 		if (NetherCubeParkour.getInstance().getConfig().getBoolean("give_barrier_block_to_middle_slot_on_hotbar")) {		
 			e.getPlayer().getInventory().setItem(4,	new ItemBuilder(Material.BARRIER).setName("&cRestart Map &7&o(Right Click)").build());
-		}		
+		}	
+		
+		// Issue #15
+		ArrayList<UUID> uuids = new ArrayList<UUID>();
+		uuids.add(e.getPlayer().getUniqueId());
+		
+		Bukkit.getScheduler().runTaskLaterAsynchronously(NetherCubeParkour.getInstance(), new Runnable() {
+			
+			@Override
+			public void run() {
+				LeaderboardManager.updateCachedFastestTimeLeaderboardPositions(uuids);				
+			}
+		}, 20);
 	}
 
 	@EventHandler

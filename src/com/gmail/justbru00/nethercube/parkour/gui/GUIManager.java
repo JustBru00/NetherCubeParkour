@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.gmail.justbru00.nethercube.parkour.data.PlayerData;
 import com.gmail.justbru00.nethercube.parkour.data.PlayerMapData;
+import com.gmail.justbru00.nethercube.parkour.leaderboards.LeaderboardManager;
 import com.gmail.justbru00.nethercube.parkour.map.Map;
 import com.gmail.justbru00.nethercube.parkour.map.MapManager;
 import com.gmail.justbru00.nethercube.parkour.utils.ItemBuilder;
@@ -168,28 +169,22 @@ public class GUIManager {
 		}
 		// End First Line
 		
-		// Second Line - Finish reward
+		// Second Line - Map Placement Issue #15
 		String secondLine;
 		
-		int reward = 0;
-		if (pmd.getFinishes() == 0) {
-			reward = map.getRewardAmount();
-		} else if (pmd.getFinishes() == 1) {
-			reward = (int) (.75 * map.getRewardAmount());
-		} else if (pmd.getFinishes() == 2) {
-			reward = (int) (.50 * map.getRewardAmount());
-		} else if (pmd.getFinishes() == 3) {
-			reward = (int) (.25 * map.getRewardAmount());
-		}  else {
-			// over 4 times finished
-			reward = 0;
-		}
-			
-		if (reward <= 0) {
-			reward = 0;
+		int placement = LeaderboardManager.getCachedLeaderboardPositionOnMap(mapInternalName, p.getUniqueId());
+		String placementMsg = Messager.color("&cAn unknown error occured.");
+		if (placement == -1) {
+			placementMsg = "Lower than the top 100";
+		} else if (placement == -2) {
+			placementMsg = "Lower than the top 100";
+		} else if (pmd.getFinishes() == -3) {
+			placementMsg = "Not yet cached";
+		} else {
+			placementMsg = "#" + placement;
 		}
 		
-		secondLine = Messager.color("&7Finish reward: &e" + reward);
+		secondLine = Messager.color("&7Placement: &e" + placementMsg);
 		
 		// End Second Line
 		

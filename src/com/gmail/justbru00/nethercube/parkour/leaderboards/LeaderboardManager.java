@@ -14,6 +14,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.justbru00.nethercube.parkour.data.PlayerData;
@@ -29,6 +31,11 @@ public class LeaderboardManager {
 	private static Location balanceLeaderBoardLocation;
 	private static HashMap<String, Hologram> fastestHolograms = new HashMap<String, Hologram>();
 	private static Hologram balanceHologram;
+	
+	/**
+	 * UUID is player UUID. 
+	 */
+	private static HashMap<UUID, CachedPlayerFastestTimePlacements> cachedFastestTimeLeaderboardPositions = new HashMap<UUID, CachedPlayerFastestTimePlacements>();
 
 	public static Map<UUID, Long> getFastestTimesForMap(String mapInternalName, int limit) {
 		ArrayList<PlayerData> allTheData = new ArrayList<PlayerData>();
@@ -54,6 +61,56 @@ public class LeaderboardManager {
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 		
 		return top;
+	}
+	
+	/**
+	 * This method gives the players fastest time placement for the given map.
+	 * @param mapinternalname
+	 * @param uuid
+	 * @return Returns the position on the given map. -1 if lower than the top 100. -2 if no position calculated yet. Returns -3 if no map positions have been cached for the given player uuid.
+	 */
+	public static int getCachedLeaderboardPositionOnMap(String mapinternalname, UUID uuid) {
+		if (!cachedFastestTimeLeaderboardPositions.containsKey(uuid)) {
+			return -3;
+		}
+		
+		for (Entry<UUID, CachedPlayerFastestTimePlacements> entry : cachedFastestTimeLeaderboardPositions.entrySet()) {
+			if (entry.getKey().equals(uuid)) {
+				return entry.getValue().getMapPosition(mapinternalname);
+			}
+		}
+		
+		return -3;
+	}
+	
+	/**
+	 * This method should be run async to prevent server lag.
+	 */
+	public static void updateCachedFastestTimeLeaderboardPositions(ArrayList<UUID> uuids) {
+		for (com.gmail.justbru00.nethercube.parkour.map.Map map : MapManager.getMaps()) {
+			Map<UUID, Long> topTimesInOrder = getFastestTimesForMap(map.getInternalName(), 100);
+			
+			int placement = 1;
+			for (Entry<UUID, Long> entry : topTimesInOrder.entrySet()) {
+				for (UUID uuid : uuids) {
+					if (entry.getKey().equals(uuid)) {
+						// This person is in the list.
+						if (!cachedFastestTimeLeaderboardPositions.containsKey(uuid)) {
+							cachedFastestTimeLeaderboardPositions.put(uuid, new CachedPlayerFastestTimePlacements());
+						} 
+						
+						CachedPlayerFastestTimePlacements cpftp = cachedFastestTimeLeaderboardPositions.get(uuid);
+						cpftp.addOrUpdateMapPosition(map.getInternalName(), placement);						
+					}
+				}
+				
+				placement++;
+			}
+		}
+		// Debug message
+		for (Entry<UUID, CachedPlayerFastestTimePlacements> entry : cachedFastestTimeLeaderboardPositions.entrySet()) {
+			Messager.sendBC("&c[Debug] &6" + entry.getKey().toString() + " " + entry.getValue().toString());
+		}		
 	}
 
 	public static void updateBalanceLeaderboard() {
@@ -287,6 +344,26 @@ public class LeaderboardManager {
 				Messager.debug("Starting auto leaderboard update.");
 				updateAllFastestTimeLeaderboard();
 				updateBalanceLeaderboard();
+				// Issue #15
+				Bukkit.getScheduler().scheduleSyncDelayedTask(NetherCubeParkour.getInstance(), new Runnable() {
+					
+					@Override
+					public void run() {
+						ArrayList<UUID> onlineUuids = new ArrayList<UUID>();
+						for (Player player : Bukkit.getOnlinePlayers()) {
+							onlineUuids.add(player.getUniqueId());
+						}
+						Bukkit.getScheduler().runTaskAsynchronously(NetherCubeParkour.getInstance(), new Runnable() {
+							
+							@Override
+							public void run() {
+								// Run the actual position calculations aync because we like to not have lag spikes.
+								updateCachedFastestTimeLeaderboardPositions(onlineUuids);								
+							}
+						});
+					}
+				});
+				// End Issue #15
 				Messager.debug("Finished auto leaderboard update.");
 			}
 		}, 30 * 20, ticksBetweenUpdates);
