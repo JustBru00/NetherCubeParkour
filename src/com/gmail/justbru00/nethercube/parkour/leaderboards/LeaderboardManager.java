@@ -107,9 +107,10 @@ public class LeaderboardManager {
 				placement++;
 			}
 		}
+		
 		// Debug message
 		for (Entry<UUID, CachedPlayerFastestTimePlacements> entry : cachedFastestTimeLeaderboardPositions.entrySet()) {
-			Messager.sendBC("&c[Debug] &6" + entry.getKey().toString() + " " + entry.getValue().toString());
+			Messager.debug("&6" + entry.getKey().toString() + " " + entry.getValue().toString());
 		}		
 	}
 

@@ -120,15 +120,6 @@ public class GUIManager {
 		//Inventory inv = Bukkit.createInventory(null, 54, Messager.color("&6Currency: " + pd.getCurrency()));
 		Inventory inv = Bukkit.createInventory(null, 54, Messager.color("&6Courses: "));
 		
-		// Set the border glass
-		// 0-9, 10,18,19,27,28,36,37,45,46-54 minus one for all these
-		
-		Integer[] borderSlots = {0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,46,47,48,49,50,51,52,53};
-		
-		for (Integer slot : borderSlots) {
-			inv.setItem(slot, borderGlass);
-		}
-		
 		// Fill the maps in
 		for (Map map : MapManager.getMaps()) {
 			inv.addItem(getMapItemFor(p, map.getInternalName()));
