@@ -21,7 +21,7 @@ public class EpicIceTrack extends JavaPlugin {
 	
 	public static ConsoleCommandSender console = Bukkit.getConsoleSender();
 	public static Logger log = Bukkit.getLogger();
-	public static String prefix = Messager.color("&8[&cNether&6Cube&fParkour&8] &6");
+	public static String prefix = Messager.color("&8[&bEpic&fIceTrack&8] &6");
 	private static EpicIceTrack instance;
 	public static PluginFile dataFile = null;
 	public static boolean debug = true;
