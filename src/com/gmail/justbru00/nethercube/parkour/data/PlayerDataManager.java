@@ -15,6 +15,10 @@ import com.gmail.justbru00.nethercube.parkour.map.MapManager;
 import com.gmail.justbru00.nethercube.parkour.utils.Messager;
 import com.gmail.justbru00.nethercube.parkour.utils.PluginFile;
 
+/**
+ * @deprecated Replaced by {@link AsyncFlatFileManager}
+ *
+ */
 public class PlayerDataManager {
 
 	private static ArrayList<PlayerData> dataForOnlinePlayers;
@@ -22,6 +26,7 @@ public class PlayerDataManager {
 	private static BukkitScheduler scheduler = Bukkit.getScheduler();
 	
 	/**
+	 * 
 	 * Call this method when the plugin starts and after any plugin reload.
 	 */
 	public static void init() {

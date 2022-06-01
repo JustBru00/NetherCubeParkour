@@ -1,6 +1,6 @@
-name: NetherCubeParkour
-main: com.gmail.justbru00.nethercube.parkour.main.NetherCubeParkour
-version: 1.8-RC2
+name: EpicIceTrack
+main: com.justbru00.epic.icetrack.main.EpicIceTrack
+version: 2.0-INDEV
 authors: [JustBru00,Justin Brubaker,SethTheLasersloth]
 softdepend: [HolographicDisplays]
 api-version: 1.16

@@ -8,6 +8,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.justbru00.nethercube.parkour.commands.*;
+import com.gmail.justbru00.nethercube.parkour.data.AsyncFlatFileManager;
 import com.gmail.justbru00.nethercube.parkour.gui.GUIManager;
 import com.gmail.justbru00.nethercube.parkour.leaderboards.LeaderboardManager;
 import com.gmail.justbru00.nethercube.parkour.listeners.*;
@@ -28,6 +29,7 @@ public class NetherCubeParkour extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		AsyncFlatFileManager.onDisable();
 		Messager.msgConsole("&cThe plugin is disabled.");
 		instance = null;
 	}
@@ -42,7 +44,9 @@ public class NetherCubeParkour extends JavaPlugin {
 		saveDefaultConfig();
 		debug = getConfig().getBoolean("debug");		
 		MapManager.init();
-		dataFile = new PluginFile(this, "data.yml", "data.yml");		
+		dataFile = new PluginFile(this, "data.yml", "data.yml");	
+		
+		AsyncFlatFileManager.init();	
 		GUIManager.init();
 		PlayerTimer.init();
 		LeaderboardManager.loadLeaderboardLines();

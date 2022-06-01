@@ -31,6 +31,7 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import com.gmail.justbru00.nethercube.parkour.data.AsyncFlatFileManager;
 import com.gmail.justbru00.nethercube.parkour.leaderboards.LeaderboardManager;
 import com.gmail.justbru00.nethercube.parkour.main.NetherCubeParkour;
 import com.gmail.justbru00.nethercube.parkour.map.Map;
@@ -134,9 +135,10 @@ public class IceTrackListener implements Listener {
 			
 			@Override
 			public void run() {
+				AsyncFlatFileManager.onPlayerJoin(e.getPlayer().getUniqueId());
 				LeaderboardManager.updateCachedFastestTimeLeaderboardPositions(uuids);				
 			}
-		}, 20);
+		}, 20);	
 	}
 
 	@EventHandler

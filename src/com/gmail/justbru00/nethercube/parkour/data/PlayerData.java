@@ -3,6 +3,7 @@ package com.gmail.justbru00.nethercube.parkour.data;
 import static com.gmail.justbru00.nethercube.parkour.main.NetherCubeParkour.dataFile;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -12,6 +13,8 @@ import org.bukkit.OfflinePlayer;
 import com.gmail.justbru00.nethercube.parkour.main.NetherCubeParkour;
 import com.gmail.justbru00.nethercube.parkour.map.Map;
 import com.gmail.justbru00.nethercube.parkour.map.MapManager;
+import com.gmail.justbru00.nethercube.parkour.utils.Messager;
+import com.gmail.justbru00.nethercube.parkour.utils.PluginFile;
 
 public class PlayerData {
 
@@ -20,6 +23,21 @@ public class PlayerData {
 	private ArrayList<PlayerMapData> mapData = new ArrayList<PlayerMapData>();
 	
 	public static PlayerData getDataFor(OfflinePlayer p) {
+		Optional<PlayerData> possiblePD = AsyncFlatFileManager.getPlayerData(p.getUniqueId());
+		if (possiblePD.isEmpty()) {
+			Messager.msgConsole("&c[PlayerData] The player data from AsyncFlatFileManager was empty. Something has gone badly.");
+			return null;
+		}
+		
+		return possiblePD.get();
+	}
+	
+	/**
+	 * @deprecated Replaced by {@link AsyncFlatFileManager}
+	 * @param p
+	 * @return
+	 */
+	public static PlayerData getDataForV1(OfflinePlayer p) {
 		PlayerData pd = new PlayerData(p.getUniqueId());
 		
 		if (dataFile.getConfigurationSection(p.getUniqueId().toString()) == null) {
@@ -88,11 +106,36 @@ public class PlayerData {
 		return pd;
 	}
 	
+	public void save() {
+		Optional<AsyncCachedPluginFile> possible =  AsyncFlatFileManager.getCachedFile(uuid);
+		
+		if (possible.isEmpty()) {
+			Messager.msgConsole("&cFailed to run PlayerData#save(). Something has gone terribly wrong.");
+			return;
+		}
+		
+		AsyncCachedPluginFile cachedFile = possible.get();
+		PluginFile pdf = cachedFile.getFile();
+		// Currency
+		pdf.set(uuid.toString() + ".currency", currency);
+				
+		// Player's map data
+		for (PlayerMapData pmd : mapData) {
+			String prePath = "maps.";
+			pdf.set(prePath + pmd.getInternalName() + ".u", pmd.isUnlocked());							
+			pdf.set(prePath + pmd.getInternalName() + ".a", pmd.getAttempts());
+			pdf.set(prePath + pmd.getInternalName() + ".f", pmd.getFinishes());
+			pdf.set(prePath + pmd.getInternalName() + ".b", pmd.getBestTime());
+		}
+		cachedFile.setSaveNeeded(true);
+	}
+	
 	/**
+	 * @deprecated Replaced by {@link AsyncFlatFileManager}
 	 * Saves this data to the config. This will actually write to disk.
 	 * This is used after changing a value
 	 */
-	public void save() {
+	public void saveV1() {
 		
 		// Currency
 		dataFile.set(uuid.toString() + ".currency", currency);
@@ -110,6 +153,7 @@ public class PlayerData {
 	}
 	
 	/**
+	 * @deprecated Replaced by {@link AsyncFlatFileManager}
 	 * This method is a syncronized method to make sure all data is saved and we don't lose anything.
 	 * All changes are saved in order.
 	 */
