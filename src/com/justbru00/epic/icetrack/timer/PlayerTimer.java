@@ -54,7 +54,7 @@ public class PlayerTimer {
 						PlayerData pd = PlayerData.getDataFor(p);
 						PlayerMapData pmd = pd.getMapData(playersInMaps.get(p.getUniqueId()).getInternalName());
 						
-						long mapTime = Duration.between(playerMapStartTime.get(p.getUniqueId()), Instant.now()).toMillis();
+						long mapTime = Duration.between(playerMapStartTime.get(p.getUniqueId()), EpicIceTrack.currentTime).toMillis();
 						
 						if (pmd.getBestTime() == -1) {
 							// The default value is still saved. This is currently their best time
@@ -129,7 +129,7 @@ public class PlayerTimer {
 		}
 		UUID boatUuid = online.getVehicle().getUniqueId();
 		
-		playerMapStartTime.put(p.getUniqueId(), Instant.now());
+		playerMapStartTime.put(p.getUniqueId(), EpicIceTrack.currentTime);
 		playersInMaps.put(p.getUniqueId(), m);
 		playersInMapsBoatUuids.put(p.getUniqueId(), boatUuid);
 		playersCheckpointScore.put(p.getUniqueId(), 0);
