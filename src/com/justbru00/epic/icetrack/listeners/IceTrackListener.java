@@ -223,4 +223,9 @@ public class IceTrackListener implements Listener {
 			}
 		}
 	}
+
+	@EventHandler
+	public void onStartTick(ServerTickStartEvent e) {
+		EpicIceTrack.currentTime = Instant.now();
+	}
 }

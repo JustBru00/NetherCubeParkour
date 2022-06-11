@@ -191,8 +191,7 @@ public class PlayerTimer {
 	 * @param p
 	 * @param m
 	 */
-	public static void playerEndedMap(Player p, Map m) {		
-		Instant endTime = Instant.now();
+	public static void playerEndedMap(Player p, Map m) {
 		
 		if (!playersInMaps.containsKey(p.getUniqueId())) {
 			Messager.debug("&cFINISHED BEFORE STARTING");
@@ -247,7 +246,8 @@ public class PlayerTimer {
 		PlayerData pd = PlayerData.getDataFor(p);
 		PlayerMapData pmd = pd.getMapData(m.getInternalName());		
 		
-		long mapTime = Duration.between(playerMapStartTime.get(p.getUniqueId()), endTime).toMillis();
+		long mapTime = Duration.between(playerMapStartTime.get(p.getUniqueId()), EpicIceTrack.currentTime).toMillis();
+		mapTime = Math.round(mapTime/50) * 50;
 		
 		if (pmd.getBestTime() == -1) {
 			// The default value is still saved. This is the new best time.

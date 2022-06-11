@@ -26,6 +26,7 @@ public class EpicIceTrack extends JavaPlugin {
 	public static PluginFile dataFile = null;
 	public static boolean debug = true;
 	public static boolean enableLeaderboards = true;
+	public static Instant currentTime = Instant.now();
 
 	@Override
 	public void onDisable() {
