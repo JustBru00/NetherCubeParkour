@@ -322,8 +322,7 @@ public class ParkourAdminCommand implements CommandExecutor {
 						
 						@Override
 						public void run() {
-							LeaderboardManager.updateAllFastestTimeLeaderboard(sender);
-							LeaderboardManager.updateBalanceLeaderboard(sender);
+							LeaderboardManager.updateAllFastestTimeLeaderboard(sender);							
 						}
 					});
 					Messager.msgSender("&aAttempting to update leaderboards. You should see a success message soon.", sender);

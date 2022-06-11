@@ -1,5 +1,7 @@
 package com.justbru00.epic.icetrack.leaderboards;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -18,19 +20,28 @@ import org.bukkit.entity.Player;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+import com.justbru00.epic.icetrack.data.AsyncFlatFileManager;
 import com.justbru00.epic.icetrack.data.PlayerData;
 import com.justbru00.epic.icetrack.main.EpicIceTrack;
 import com.justbru00.epic.icetrack.map.MapManager;
 import com.justbru00.epic.icetrack.utils.Messager;
 
 public class LeaderboardManager {
-
-	private static List<String> balanceLeaderBoardLines = new ArrayList<String>();
+	
 	private static List<String> fastestTimeBoardLines = new ArrayList<String>();
-	private static HashMap<String, Location> fastestTimeBoardLocations = new HashMap<String, Location>();
-	private static Location balanceLeaderBoardLocation;
+	private static HashMap<String, Location> fastestTimeBoardLocations = new HashMap<String, Location>();	
 	private static HashMap<String, Hologram> fastestHolograms = new HashMap<String, Hologram>();
-	private static Hologram balanceHologram;
+	
+	private static FilenameFilter ymlFileFilter = new FilenameFilter(){
+        public boolean accept(File dir, String name) {
+           String lowercaseName = name.toLowerCase();
+           if (lowercaseName.endsWith(".yml")) {
+              return true;
+           } else {
+              return false;
+           }
+        }
+     };
 	
 	/**
 	 * UUID is player UUID. 
@@ -40,11 +51,17 @@ public class LeaderboardManager {
 	public static Map<UUID, Long> getFastestTimesForMap(String mapInternalName, int limit) {
 		ArrayList<PlayerData> allTheData = new ArrayList<PlayerData>();
 
-		for (String key : EpicIceTrack.dataFile.getKeys(false)) {
+		File flatfileDirectory = new File(EpicIceTrack.getInstance().getDataFolder() + File.separator + "flatfilestorage");		
+		
+		for (String fileName : flatfileDirectory.list(ymlFileFilter)) {
 			try {
-				allTheData.add(PlayerData.getDataFor(Bukkit.getOfflinePlayer(UUID.fromString(key))));
+				String uuidString = fileName.replaceAll(".yml", "");		
+				UUID playerUuid = UUID.fromString(uuidString);
+				AsyncFlatFileManager.loadAndCacheFile(playerUuid);
+				
+				allTheData.add(PlayerData.getDataFor(Bukkit.getOfflinePlayer(playerUuid)));
 			} catch (Exception e) {
-				Messager.debug("&cFailed to get data for uuid: " + key);
+				Messager.debug("&cFailed to get data for file: " + fileName);
 			}
 		}
 
@@ -113,100 +130,7 @@ public class LeaderboardManager {
 			Messager.debug("&6" + entry.getKey().toString() + " " + entry.getValue().toString());
 		}		
 	}
-
-	public static void updateBalanceLeaderboard() {
-		if (!EpicIceTrack.enableLeaderboards) {
-			return;
-		}
-		Location loc = balanceLeaderBoardLocation;
-
-		ArrayList<PlayerData> allTheData = new ArrayList<PlayerData>();
-
-		for (String key : EpicIceTrack.dataFile.getKeys(false)) {
-			try {
-				allTheData.add(PlayerData.getDataFor(Bukkit.getOfflinePlayer(UUID.fromString(key))));
-			} catch (Exception e) {
-				Messager.debug("&cFailed to get data for uuid: " + key);
-			}
-		}
-
-		HashMap<UUID, Integer> dataMap = new HashMap<UUID, Integer>();
-
-		for (PlayerData v : allTheData) {
-			dataMap.put(v.getUuid(), v.getCurrency());
-		}
-		// Get the top ten
-		Map<UUID, Integer> topTen = dataMap.entrySet().stream()
-				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(10)
-				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-
-		List<String> textLines = new ArrayList<String>();
-
-		ArrayList<UUID> orderedIds = new ArrayList<UUID>();
-
-		for (Entry<UUID, Integer> entry : topTen.entrySet()) {
-			orderedIds.add(entry.getKey());
-		}
-
-		for (String line : balanceLeaderBoardLines) {
-			// Replace names
-			for (int i = 1; i <= 10; i++) {
-				String name;
-				try {
-					name = Bukkit.getOfflinePlayer(orderedIds.get(i - 1)).getName();
-				} catch (IndexOutOfBoundsException e) {
-					name = "Empty";
-				}
-
-				if (name == null) {
-					name = "Empty";
-				}
-
-				line = line.replace("{name" + i + "}", name);
-			}
-
-			// Replace Balance
-			for (int i = 1; i <= 10; i++) {
-				String currency;
-				try {
-					currency = String.valueOf(topTen.get(orderedIds.get(i - 1)));
-				} catch (IndexOutOfBoundsException e) {
-					currency = "none";
-				}
-
-				line = line.replace("{bal" + i + "}", currency);
-			}
-
-			textLines.add(line);
-		}
-		Bukkit.getScheduler().runTask(EpicIceTrack.getInstance(), new Runnable() {
-
-			@Override
-			public void run() {
-				// Update actual hologram
-				Hologram holo;
-				if (balanceHologram == null) {
-					holo = HologramsAPI.createHologram(EpicIceTrack.getInstance(), loc);
-					balanceHologram = holo;
-				} else {
-					holo = balanceHologram;
-				}
-
-				holo.clearLines();
-
-				for (String line : textLines) {
-					holo.appendTextLine(Messager.color(line));
-				}
-				Messager.debug("[LeaderManager] Finished updating balance leaderboard.");
-			}
-		});
-	}
-
-	public static void updateBalanceLeaderboard(CommandSender toNotify) {
-		updateBalanceLeaderboard();
-		Messager.msgSender("&aUpdated the balance leaderboard successfully.", toNotify);
-	}
-
+	
 	public static void updateFastestTimeLeaderboard(String mapInternalName) {
 		if (!EpicIceTrack.enableLeaderboards) {
 			return;
@@ -217,11 +141,17 @@ public class LeaderboardManager {
 
 		ArrayList<PlayerData> allTheData = new ArrayList<PlayerData>();
 
-		for (String key : EpicIceTrack.dataFile.getKeys(false)) {
+		File flatfileDirectory = new File(EpicIceTrack.getInstance().getDataFolder() + File.separator + "flatfilestorage");		
+		
+		for (String fileName : flatfileDirectory.list(ymlFileFilter)) {
 			try {
-				allTheData.add(PlayerData.getDataFor(Bukkit.getOfflinePlayer(UUID.fromString(key))));
+				String uuidString = fileName.replaceAll(".yml", "");		
+				UUID playerUuid = UUID.fromString(uuidString);
+				AsyncFlatFileManager.loadAndCacheFile(playerUuid);
+				
+				allTheData.add(PlayerData.getDataFor(Bukkit.getOfflinePlayer(playerUuid)));
 			} catch (Exception e) {
-				Messager.debug("&cFailed to get data for uuid: " + key);
+				Messager.debug("&cFailed to get data for file: " + fileName);
 			}
 		}
 
@@ -280,8 +210,7 @@ public class LeaderboardManager {
 
 			@Override
 			public void run() {
-				// Update actual hologram
-				// Hologram naming method: fastest_mapinternalname - If I could name them lol
+				// Update actual hologram				
 				Hologram holo;
 				if (fastestHolograms.get(mapInternalName) == null) {
 					holo = HologramsAPI.createHologram(EpicIceTrack.getInstance(), loc);
@@ -334,7 +263,7 @@ public class LeaderboardManager {
 	}
 
 	/**
-	 * This will not be reloaded with /elyadmin reload
+	 * This will not be reloaded 
 	 */
 	public static void startUpdateTask() {
 		int ticksBetweenUpdates = EpicIceTrack.getInstance().getConfig()
@@ -344,7 +273,7 @@ public class LeaderboardManager {
 			public void run() {
 				Messager.debug("Starting auto leaderboard update.");
 				updateAllFastestTimeLeaderboard();
-				updateBalanceLeaderboard();
+				
 				// Issue #15
 				Bukkit.getScheduler().scheduleSyncDelayedTask(EpicIceTrack.getInstance(), new Runnable() {
 					
@@ -374,17 +303,7 @@ public class LeaderboardManager {
 		FileConfiguration config = EpicIceTrack.getInstance().getConfig();
 
 		// Clear to allow for reloading
-		fastestTimeBoardLocations.clear();
-
-		// Load balance leaderboard location
-		balanceLeaderBoardLocation = new Location(
-				Bukkit.getWorld(config.getString("leaderboards.topbalance.location.world")),
-				config.getDouble("leaderboards.topbalance.location.x"),
-				config.getDouble("leaderboards.topbalance.location.y"),
-				config.getDouble("leaderboards.topbalance.location.z"));
-
-		// Load balance leaderboard lines
-		balanceLeaderBoardLines = config.getStringList("leaderboards.topbalance.lines");
+		fastestTimeBoardLocations.clear();		
 
 		// Load Fastest Time leaderboard lines
 		fastestTimeBoardLines = config.getStringList("leaderboards.fastesttime.lines");

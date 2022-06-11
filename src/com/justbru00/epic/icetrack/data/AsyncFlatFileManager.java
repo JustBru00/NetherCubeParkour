@@ -1,6 +1,8 @@
 package com.justbru00.epic.icetrack.data;
 
 import java.io.File;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
@@ -94,8 +96,11 @@ public class AsyncFlatFileManager {
 		// save all files that are marked as needing saved.		
 		for (AsyncCachedPluginFile f : cachedFiles) {
 			if (f.isSaveNeeded()) {
+				Instant start = Instant.now();
 				f.getFile().save();
-				Messager.msgConsole("[AsyncFlatFileManager] &7Saved player data to disk for " + f.getPlayerUuid() + ".");
+				Messager.msgConsole("&7[AsyncFlatFileManager] Saved player data to disk for " + 
+				f.getPlayerUuid() + " in " + Duration.between(start, Instant.now()).toMillis() + " ms.");
+				f.setSaveNeeded(false);
 			}
 		}
 	}

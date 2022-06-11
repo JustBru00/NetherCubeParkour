@@ -25,7 +25,7 @@ public class PlayerData {
 	public static PlayerData getDataFor(OfflinePlayer p) {
 		Optional<PlayerData> possiblePD = AsyncFlatFileManager.getPlayerData(p.getUniqueId());
 		if (possiblePD.isEmpty()) {
-			Messager.msgConsole("&c[PlayerData] The player data from AsyncFlatFileManager was empty. Something has gone badly.");
+			Messager.msgConsole("&c[PlayerData] The player data from AsyncFlatFileManager was empty. Something has gone very wrong.");
 			return null;
 		}
 		
