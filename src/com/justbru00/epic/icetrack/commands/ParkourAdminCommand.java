@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import com.justbru00.epic.icetrack.data.Migrator;
 import com.justbru00.epic.icetrack.data.PlayerData;
 import com.justbru00.epic.icetrack.gui.GUIManager;
 import com.justbru00.epic.icetrack.leaderboards.LeaderboardManager;
@@ -326,6 +327,10 @@ public class ParkourAdminCommand implements CommandExecutor {
 						}
 					});
 					Messager.msgSender("&aAttempting to update leaderboards. You should see a success message soon.", sender);
+					return true;
+				} else if (args[0].equalsIgnoreCase("migratedata")) {
+					Messager.msgSender("&aAttempting to migrate data from data.yml to flatfilestorage", sender);
+					Migrator.migrateV1toV2();					
 					return true;
 				} else {
 					Messager.msgSender("&cSorry that the argument " + args[0] + " is not correct. Use /parkouradmin help for a list of arguments.", sender);

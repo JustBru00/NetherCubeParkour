@@ -117,7 +117,7 @@ public class PlayerData {
 		AsyncCachedPluginFile cachedFile = possible.get();
 		PluginFile pdf = cachedFile.getFile();
 		// Currency
-		pdf.set(uuid.toString() + ".currency", currency);
+		pdf.set("currency", currency);
 				
 		// Player's map data
 		for (PlayerMapData pmd : mapData) {
