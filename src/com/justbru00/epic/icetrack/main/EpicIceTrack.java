@@ -7,6 +7,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.justbru00.epic.icetrack.bstats.Metrics;
 import com.justbru00.epic.icetrack.commands.*;
 import com.justbru00.epic.icetrack.data.AsyncFlatFileManager;
 import com.justbru00.epic.icetrack.gui.GUIManager;
@@ -26,6 +27,7 @@ public class EpicIceTrack extends JavaPlugin {
 	public static PluginFile dataFile = null;
 	public static boolean debug = true;
 	public static boolean enableLeaderboards = true;
+	private static final int BSTATS_PLUGIN_ID = 15450;
 
 	@Override
 	public void onDisable() {
@@ -86,6 +88,9 @@ public class EpicIceTrack extends JavaPlugin {
 		Messager.msgConsole("&6Prevent inventory movement: " + getConfig().getBoolean("prevent_inventory_movement"));
 		Messager.msgConsole("&6Clear player inventory on join: " + getConfig().getBoolean("clear_player_inventory_on_join"));
 		Messager.msgConsole("&6Give players barrier block: " + getConfig().getBoolean("give_barrier_block_to_middle_slot_on_hotbar"));
+		
+		Metrics bstats = new Metrics(instance, BSTATS_PLUGIN_ID);
+		bstats.addCustomChart(new Metrics.SimplePie("number_of_courses", () -> String.valueOf(MapManager.getNumberOfMaps())));
 	}
 	
 	public static EpicIceTrack getInstance() {
