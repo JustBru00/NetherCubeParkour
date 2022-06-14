@@ -8,8 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import com.justbru00.epic.icetrack.enums.MapDifficulty;
-import com.justbru00.epic.icetrack.enums.MapLength;
 import com.justbru00.epic.icetrack.main.EpicIceTrack;
 import com.justbru00.epic.icetrack.utils.ItemBuilder;
 import com.justbru00.epic.icetrack.utils.Messager;
@@ -35,26 +33,16 @@ public class MapManager {
 			
 			try {
 			m.setGuiItem(new ItemBuilder(Material.valueOf(c.getString("maps." + mapKey + ".item.material"))).setDataValue(c.getInt("maps." + mapKey + ".item.data")).setName(c.getString("maps." + mapKey + ".item.displayname")).build());
-			m.setDifficulty(MapDifficulty.fromString(c.getString("maps." + mapKey + ".difficulty")));
 			m.setCreatorName(c.getString("maps." + mapKey + ".creatorname"));
 			m.setInternalName(mapKey);
-			m.setLength(MapLength.fromString(c.getString("maps." + mapKey +".length")));
-			m.setPurchaseCost(c.getInt(prePath + "purchasecost"));
-			m.setRewardAmount(c.getInt(prePath + "rewardamount"));
+			
 			boolean checkpoint = c.getBoolean(prePath + "requirescheckpoint");
 			if (!checkpoint) {
 				Messager.msgConsole("&6[MapManager] Map '" + mapKey + "' doesn't have checkpoints enabled. If you want to change this please add 'requirescheckpoint: true` to the configuration section for this map.");
 			}
 			m.setRequiresCheckpoint(checkpoint);
-			Location start;
-			Location end;
-			Location spawnpoint;
 			
-			start = new Location(Bukkit.getWorld(c.getString(prePath + "startlocation.world")), c.getInt(prePath + "startlocation.x"), c.getInt(prePath + "startlocation.y"), c.getInt(prePath + "startlocation.z"));
-			m.setStartPlateLocation(start);
-			
-			end = new Location(Bukkit.getWorld(c.getString(prePath + "endinglocation.world")), c.getInt(prePath + "endinglocation.x"), c.getInt(prePath + "endinglocation.y"), c.getInt(prePath + "endinglocation.z"));
-			m.setEndingPlateLocation(end);
+			Location spawnpoint;					
 			
 			spawnpoint = new Location(Bukkit.getWorld(c.getString(prePath + "spawnlocation.world")), c.getDouble(prePath + "spawnlocation.x"), c.getDouble(prePath + "spawnlocation.y"),
 					c.getDouble(prePath + "spawnlocation.z"), c.getInt(prePath + "spawnlocation.yaw"), c.getInt(prePath + "spawnlocation.pitch"));
@@ -84,38 +72,6 @@ public class MapManager {
 
 	public static int getNumberOfMaps() {
 		return maps.size();
-	}
-	
-	/**
-	 * Searches all maps to see if one has the location registered as a plate location.
-	 * @param loc The location to check.
-	 * @return The map the plate belongs to, otherwise returns null.
-	 */
-	public static Map getMapFromPlateLocation(Location loc) {
-		for (Map m : maps) {
-			if (m.getStartPlateLocation().equals(loc) || m.getEndingPlateLocation().equals(loc)) {
-				return m;
-			}
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * Searches all maps to see if one has the location registered as a plate location.
-	 * @param loc The location to check.
-	 * @return The MapPlateDetails of this possible plate location, otherwise returns null.
-	 */
-	public static MapPlateDetails getPlateDetails(Location loc) {
-		for (Map m : maps) {
-			if (m.getStartPlateLocation().equals(loc)) {
-				return new MapPlateDetails(loc, true, m);
-			} else if (m.getEndingPlateLocation().equals(loc)) {
-				return new MapPlateDetails(loc, false, m);
-			}
-		}
-		
-		return null;
-	}
+	}	
 
 }

@@ -12,7 +12,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 
-import com.justbru00.epic.icetrack.gui.GUIManager;
 import com.justbru00.epic.icetrack.map.MapManager;
 import com.justbru00.epic.icetrack.timer.PlayerTimer;
 import com.justbru00.epic.icetrack.utils.Messager;
@@ -48,22 +47,7 @@ public class MainGUIListener implements Listener {
 								e.getWhoClicked().teleport(MapManager.getMap(mapName).getSpawnLocation(), TeleportCause.PLUGIN);
 							}
 							return;
-						} 
-						
-						// Not unlocked
-						
-						//if (e.getView().getTitle().startsWith(Messager.color("&6Currency: "))) {
-						if (e.getView().getTitle().startsWith(Messager.color("&6Courses: "))) {							
-							// Make sure the item clicked is from the mainGUI
-							if (!e.getCurrentItem().equals(GUIManager.getBorderGlass())) {
-								// Item is not the border glass
-								if (e.getClick() == ClickType.RIGHT || e.getClick() == ClickType.SHIFT_RIGHT) {
-									Messager.debug("opening the confirm GUI");								
-									GUIManager.openConfirmGUI((Player) e.getWhoClicked(), e.getCurrentItem());
-								}
-							}
-						}					
-						
+						} 					
 					}
 				}
 			}

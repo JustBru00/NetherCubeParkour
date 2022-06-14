@@ -48,13 +48,8 @@ public class PlayerData {
 			
 			pathPre = p.getUniqueId().toString() + ".maps.";
 			
-			for (Map map : MapManager.getMaps()) {
-				if (map.getPurchaseCost() == Map.UNLOCKED_DEFAULT) {
-					dataFile.set(pathPre + map.getInternalName() + ".unlocked", true);
-				} else {
-					dataFile.set(pathPre + map.getInternalName() + ".unlocked", false);
-				}
-				
+			for (Map map : MapManager.getMaps()) {				
+				dataFile.set(pathPre + map.getInternalName() + ".unlocked", true);				
 				dataFile.set(pathPre + map.getInternalName() + ".attempts", 0);
 				dataFile.set(pathPre + map.getInternalName() + ".finishes", 0);
 				dataFile.set(pathPre + map.getInternalName() + ".besttime", (long) -1);
@@ -86,14 +81,9 @@ public class PlayerData {
 			} else {
 				// Create new section for this map
 				boolean unlocked;
-				if (map.getPurchaseCost() == Map.UNLOCKED_DEFAULT) {
-					dataFile.set(prePath + map.getInternalName() + ".unlocked", true);
-					unlocked = true;
-				} else {
-					dataFile.set(prePath + map.getInternalName() + ".unlocked", false);
-					unlocked = false;
-				}
 				
+				dataFile.set(prePath + map.getInternalName() + ".unlocked", true);
+				unlocked = true;				
 				dataFile.set(prePath + map.getInternalName() + ".attempts", 0);
 				dataFile.set(prePath + map.getInternalName() + ".finishes", 0);
 				dataFile.set(prePath + map.getInternalName() + ".besttime", (long) -1);

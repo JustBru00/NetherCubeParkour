@@ -3,10 +3,7 @@ package com.justbru00.epic.icetrack.gui;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -53,60 +50,7 @@ public class GUIManager {
 	public static ItemStack getCannotAfford() {
 		return cannotAffordMap;
 	}
-	/**
-	 * Opens the confirm purchase gui
-	 * @param p
-	 * @param mapItem
-	 */
-	public static void openConfirmGUI(Player p, ItemStack mapItem) {
 		
-		Inventory inv = Bukkit.createInventory(null, 54, Messager.color("&6Confirm Purchase"));
-		
-		// Set the border glass
-		// 0-9, 10,18,19,27,28,36,37,45,46-54 minus one for all these
-				
-		Integer[] borderSlots = {0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,46,47,48,49,50,51,52,53};
-				
-		for (Integer slot : borderSlots) {
-			inv.setItem(slot, borderGlass);
-		}
-		
-		// Okay items
-		
-		Integer[] okaySlots = {15,16,24,25,33,34,42,43};
-		
-		for (Integer slot : okaySlots) {
-			inv.setItem(slot, okay);
-		}
-		
-		// Cancel items
-		
-		Integer[] cancelSlots = {10,11,19,20,28,29,37,38};
-		
-		for (Integer slot : cancelSlots) {
-			inv.setItem(slot, cancel);
-		}
-		
-		// Map clicked item in center
-		
-		ItemMeta im = mapItem.getItemMeta();
-		List<String> lore = im.getLore();
-		String priceLine = lore.get(0);
-		priceLine = ChatColor.stripColor(priceLine);
-		priceLine = priceLine.substring(25).trim();
-		int price = Integer.parseInt(priceLine);
-		lore.set(0, Messager.color("&7Cost: &e" + price));
-		
-		im.setLore(lore);
-		
-		mapItem.setItemMeta(im);
-		
-		inv.setItem(22, mapItem);
-		
-		p.openInventory(inv);
-		
-	}
-	
 	/**
 	 * Opens the main GUI for map selection, unlocking, and instant teleporting.
 	 * Players can left click to teleport to the start of unlocked maps
@@ -148,15 +92,9 @@ public class GUIManager {
 		String firstLine;
 		if (pmd.isUnlocked()) {
 			// Unlocked 
-			firstLine = Messager.color("&a&lUNLOCKED: Left click to start");
+			firstLine = Messager.color("&a&lUNLOCKED: Left click to teleport to start");
 		} else {
-			if (map.getPurchaseCost() <= pd.getCurrency()) {
-				// Player can unlock this
-				firstLine = Messager.color("&aRight click to UNLOCK for " + map.getPurchaseCost());
-			} else {
-				// Player cannot unlock this
-				firstLine = Messager.color("&cRight click to UNLOCK for " + map.getPurchaseCost());
-			}
+			firstLine = Messager.color("&cLOCKED: This map is currently locked by the server admins.");
 		}
 		// End First Line
 		

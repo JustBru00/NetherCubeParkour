@@ -43,23 +43,23 @@ maps:
       displayname: '&b&lMap name'
       material: 'STONE'
       data: 0
-    difficulty: 'EASY'
-    length: 'SHORT'
+    #difficulty: 'EASY'
+    #length: 'SHORT'
     creatorname: 'ItsLlfe'
-    rewardamount: 50
+    #rewardamount: 50
     requirescheckpoint: true
     # Purchase cost. -1 for unlocked by default
-    purchasecost: 100
-    startlocation:
-      x: 1
-      y: 5
-      z: 6
-      world: world
-    endinglocation:
-      x: 88
-      y: 99
-      z: 111
-      world: world   
+    #purchasecost: 100
+    #startlocation:
+    #  x: 1
+    #  y: 5
+    #  z: 6
+    #  world: world
+    #endinglocation:
+    #  x: 88
+    #  y: 99
+    #  z: 111
+    #  world: world   
     spawnlocation:
       x: 0
       y: 0

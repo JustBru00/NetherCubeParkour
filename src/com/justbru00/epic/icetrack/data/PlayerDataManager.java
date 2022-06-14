@@ -208,12 +208,7 @@ public class PlayerDataManager {
 			// b = besttime					
 			
 			for (Map map : MapManager.getMaps()) {
-				if (map.getPurchaseCost() == Map.UNLOCKED_DEFAULT) {
-					pdf.set("maps." + map.getInternalName() + ".u", true);
-				} else {
-					pdf.set("maps." + map.getInternalName() + ".u", false);
-				}
-				
+				pdf.set("maps." + map.getInternalName() + ".u", true);				
 				pdf.set("maps." + map.getInternalName() + ".a", 0);
 				pdf.set("maps." + map.getInternalName() + ".f", 0);
 				pdf.set("maps." + map.getInternalName() + ".b", (long) -1);
@@ -242,14 +237,9 @@ public class PlayerDataManager {
 			} else {
 				// Missing the section for this map. We need to add it.
 				boolean unlocked;
-				if (map.getPurchaseCost() == Map.UNLOCKED_DEFAULT) {
-					pdf.set("maps." + map.getInternalName() + ".u", true);
-					unlocked = true;
-				} else {
-					pdf.set("maps." + map.getInternalName() + ".u", false);
-					unlocked = false;
-				}
 				
+				pdf.set("maps." + map.getInternalName() + ".u", true);
+				unlocked = true;				
 				pdf.set("maps." + map.getInternalName() + ".a", 0);
 				pdf.set("maps." + map.getInternalName() + ".f", 0);
 				pdf.set("maps." + map.getInternalName() + ".b", (long) -1);

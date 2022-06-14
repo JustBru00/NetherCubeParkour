@@ -78,9 +78,7 @@ public class EpicIceTrack extends JavaPlugin {
 		
 		// REGISTER LISTENERS
 		PluginManager pm = Bukkit.getPluginManager();
-		pm.registerEvents(new MainGUIListener(), instance);
-		pm.registerEvents(new ConfirmGUIListener(), instance);
-		pm.registerEvents(new PressurePlateTriggerListener(), instance);
+		pm.registerEvents(new MainGUIListener(), instance);		
 		pm.registerEvents(new IceTrackListener(), instance);
 		
 		// NOTIFY CONSOLE ABOUT CURRENT SETTINGS

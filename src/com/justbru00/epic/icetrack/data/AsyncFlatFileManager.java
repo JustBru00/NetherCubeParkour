@@ -79,13 +79,8 @@ public class AsyncFlatFileManager {
 			// f = finishes
 			// b = besttime
 
-			for (Map map : MapManager.getMaps()) {
-				if (map.getPurchaseCost() == Map.UNLOCKED_DEFAULT) {
-					pdf.set("maps." + map.getInternalName() + ".u", true);
-				} else {
-					pdf.set("maps." + map.getInternalName() + ".u", false);
-				}
-
+			for (Map map : MapManager.getMaps()) {				
+				pdf.set("maps." + map.getInternalName() + ".u", true);
 				pdf.set("maps." + map.getInternalName() + ".a", 0);
 				pdf.set("maps." + map.getInternalName() + ".f", 0);
 				pdf.set("maps." + map.getInternalName() + ".b", (long) -1);
@@ -199,13 +194,9 @@ public class AsyncFlatFileManager {
 			// b = besttime
 
 			for (Map map : MapManager.getMaps()) {
-				if (map.getPurchaseCost() == Map.UNLOCKED_DEFAULT) {
-					pdf.set("maps." + map.getInternalName() + ".u", true);
-				} else {
-					pdf.set("maps." + map.getInternalName() + ".u", false);
-				}
-
-				pdf.set("maps." + map.getInternalName() + ".f", 0);
+				pdf.set("maps." + map.getInternalName() + ".u", true);
+				pdf.set("maps." + map.getInternalName() + ".a", 0);
+				pdf.set("maps." + map.getInternalName() + ".f", 0);				
 				pdf.set("maps." + map.getInternalName() + ".b", (long) -1);
 			}
 			pdf.save();
