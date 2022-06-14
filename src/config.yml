@@ -31,40 +31,25 @@ leaderboards:
       - '&f{name9} &7- &e{time9}' 
       - '&f{name10} &7- &e{time10}'
     locations:
-      mapinternalname:
-        x: 0
-        y: 0
-        z: 0
-        world: world
+#      examplemap:
+#        x: 0
+#        y: 0
+#        z: 0
+#        world: world
 
 maps:
-  mapinternalname:
-    item:
-      displayname: '&b&lMap name'
-      material: 'STONE'
-      data: 0
-    #difficulty: 'EASY'
-    #length: 'SHORT'
-    creatorname: 'ItsLlfe'
-    #rewardamount: 50
-    requirescheckpoint: true
-    # Purchase cost. -1 for unlocked by default
-    #purchasecost: 100
-    #startlocation:
-    #  x: 1
-    #  y: 5
-    #  z: 6
-    #  world: world
-    #endinglocation:
-    #  x: 88
-    #  y: 99
-    #  z: 111
-    #  world: world   
-    spawnlocation:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-      world: world   
+#  examplemap:
+#    item:
+#      displayname: '&b&lExample Map'
+#      material: 'STONE'
+#      data: 0   
+#    creatorname: 'JustBru00'    
+#    requirescheckpoint: true   
+#    spawnlocation:
+#      x: 0
+#      y: 0
+#      z: 0
+#      yaw: 0
+#      pitch: 0
+#      world: world   
     

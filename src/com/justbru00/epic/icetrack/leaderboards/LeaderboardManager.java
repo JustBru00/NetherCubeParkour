@@ -136,6 +136,11 @@ public class LeaderboardManager {
 			return;
 		}
 		Location loc = fastestTimeBoardLocations.get(mapInternalName);
+		
+		if (loc == null) {
+			Messager.msgConsole("&c[LeaderboardManager] Couldn't read the leaderboard location from 'leaderboards.locations." + mapInternalName + "' in config.yml.");
+			return;
+		}
 
 		com.justbru00.epic.icetrack.map.Map map = MapManager.getMap(mapInternalName);
 
