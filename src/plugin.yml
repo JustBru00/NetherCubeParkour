@@ -10,16 +10,7 @@ commands:
     aliases: [c]
   parkouradmin:
     description: The command for admin/test features.
-    aliases: [prkadmin]
-  parkourbalance:
-    description: Command to view your current elytra currency balance.
-    aliases: [prkbal]   
-  parkourlobby:
-    description: Command to teleport to the elytra lobby and leave the current map.
-    aliases: [prklobby] 
-  parkourtp:
-    description: Teleports a player to the specified map. It won't work if they don't own the map.
-    aliases: [prktp]
+    aliases: [prkadmin] 
   parkourstart:
     description: Starts the given course for the given player.
   parkourstop:
