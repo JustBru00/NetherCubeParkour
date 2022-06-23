@@ -15,7 +15,7 @@ public class BoatKillCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command arg1, String arg2, String[] arg3) {
 
-		if (sender.hasPermission("parkour.boatkill")) {
+		if (sender.hasPermission("epicicetrack.boatkill") || sender.hasPermission("parkour.boatkill")) {
 			long numberOfBoats = 0;
 			
 			for (World w : Bukkit.getWorlds()) {

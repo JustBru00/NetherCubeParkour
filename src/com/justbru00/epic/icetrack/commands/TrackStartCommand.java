@@ -9,26 +9,27 @@ import com.justbru00.epic.icetrack.map.MapManager;
 import com.justbru00.epic.icetrack.timer.PlayerTimer;
 import com.justbru00.epic.icetrack.utils.Messager;
 
-public class ParkourStopCommand implements CommandExecutor {
+public class TrackStartCommand implements CommandExecutor {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
-		if (sender.hasPermission("parkour.parkourstop")) {
+		
+		if (sender.hasPermission("epicicetrack.trackstart") || sender.hasPermission("parkour.parkourstart")) {
 			if (args.length == 2) {
 				String playerName = args[0];
 				String mapInternalName = args[1];
 				
-				PlayerTimer.playerEndedMap(Bukkit.getPlayer(playerName), MapManager.getMap(mapInternalName));
-				Messager.msgSender("&aAttempted to stop the player " + playerName + " on the map " + mapInternalName, sender);
+				PlayerTimer.playerStartingMap(Bukkit.getOfflinePlayer(playerName), MapManager.getMap(mapInternalName));
+				Messager.msgSender("&aAttempted to start the player " + playerName + " on the map " + mapInternalName, sender);
 			} else {
-				Messager.msgSender("&cIncorrect command arguments... /parkourstop <playerName> <mapInternalName>", sender);
+				Messager.msgSender("&cIncorrect command arguments... /trackstart <playerName> <mapInternalName>", sender);
 				return true;
 			}
 		} else {
 			Messager.msgSender("&cSorry you don't have permission.", sender);
 			return true;
 		}
-		
 		
 		return false;
 	}

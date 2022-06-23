@@ -9,12 +9,12 @@ import com.justbru00.epic.icetrack.map.MapManager;
 import com.justbru00.epic.icetrack.timer.PlayerTimer;
 import com.justbru00.epic.icetrack.utils.Messager;
 
-public class ParkourCheckpointCommand implements CommandExecutor {
+public class TrackCheckpointCommand implements CommandExecutor {
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
-		if (sender.hasPermission("parkour.parkourcheckpoint")) {
+		if (sender.hasPermission("epicicetrack.trackcheckpoint") || sender.hasPermission("parkour.parkourcheckpoint")) {
 			if (args.length == 2) {
 				String playerName = args[0];
 				String mapInternalName = args[1];
@@ -22,7 +22,7 @@ public class ParkourCheckpointCommand implements CommandExecutor {
 				PlayerTimer.playerCheckpointMap(Bukkit.getOfflinePlayer(playerName), MapManager.getMap(mapInternalName));
 				Messager.msgSender("&aAttempted to give checkpoint to the player " + playerName + " on the map " + mapInternalName, sender);
 			} else {
-				Messager.msgSender("&cIncorrect command arguments... /parkourcheckpoint <playerName> <mapInternalName>", sender);
+				Messager.msgSender("&cIncorrect command arguments... /trackcheckpoint <playerName> <mapInternalName>", sender);
 				return true;
 			}
 		} else {

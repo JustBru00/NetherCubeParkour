@@ -8,13 +8,13 @@ import org.bukkit.entity.Player;
 import com.justbru00.epic.icetrack.gui.GUIManager;
 import com.justbru00.epic.icetrack.utils.Messager;
 
-public class ParkourCommand implements CommandExecutor {
+public class CoursesCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
 		if (command.getName().equalsIgnoreCase("courses")) {
-			if (!sender.hasPermission("nethercubeparkour.courses")) {
+			if (!sender.hasPermission("epicicetrack.courses") || !sender.hasPermission("nethercubeparkour.courses")) {
 				Messager.msgSender("&cSorry you don't have permission to use that command.", sender);
 				return true;
 			}

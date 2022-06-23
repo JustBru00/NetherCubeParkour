@@ -20,7 +20,7 @@ public class TopTimesCommand implements CommandExecutor {
 
 		if (command.getName().equalsIgnoreCase("toptimes")) {
 
-			if (!sender.hasPermission("nethercubeparkour.toptimes")) {
+			if (!sender.hasPermission("epicicetrack.toptimes") || !sender.hasPermission("nethercubeparkour.toptimes")) {
 				Messager.msgSender("&cYou don't have permission.", sender);
 				return true;
 			}

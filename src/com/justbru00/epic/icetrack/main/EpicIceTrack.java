@@ -65,12 +65,12 @@ public class EpicIceTrack extends JavaPlugin {
 		}
 		
 		// REGISTER COMMANDS
-		getCommand("courses").setExecutor(new ParkourCommand());
+		getCommand("courses").setExecutor(new CoursesCommand());
 		getCommand("parkouradmin").setExecutor(new ParkourAdminCommand());				
-		getCommand("parkourstart").setExecutor(new ParkourStartCommand());
-		getCommand("parkourstop").setExecutor(new ParkourStopCommand());
+		getCommand("trackstart").setExecutor(new TrackStartCommand());
+		getCommand("trackstop").setExecutor(new TrackStopCommand());
 		getCommand("boatkill").setExecutor(new BoatKillCommand());
-		getCommand("parkourcheckpoint").setExecutor(new ParkourCheckpointCommand());
+		getCommand("trackcheckpoint").setExecutor(new TrackCheckpointCommand());
 		getCommand("toptimes").setExecutor(new TopTimesCommand());
 		
 		// REGISTER LISTENERS
@@ -84,6 +84,7 @@ public class EpicIceTrack extends JavaPlugin {
 		Messager.msgConsole("&6Clear player inventory on join: " + getConfig().getBoolean("clear_player_inventory_on_join"));
 		Messager.msgConsole("&6Give players barrier block: " + getConfig().getBoolean("give_barrier_block_to_middle_slot_on_hotbar"));
 		
+		// BSTATS METRICS
 		Metrics bstats = new Metrics(instance, BSTATS_PLUGIN_ID);
 		bstats.addCustomChart(new Metrics.SimplePie("number_of_courses", () -> String.valueOf(MapManager.getNumberOfMaps())));
 	}

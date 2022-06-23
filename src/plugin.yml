@@ -11,13 +11,16 @@ commands:
   parkouradmin:
     description: The command for admin/test features.
     aliases: [prkadmin] 
-  parkourstart:
+  trackstart:
     description: Starts the given course for the given player.
-  parkourstop:
+    aliases: [parkourstart]
+  trackstop:
     description: Ends the given course for the given player.    
+    aliases: [parkourstop]
   boatkill:
     description: Kills all boats that do not have players riding in them.  
-  parkourcheckpoint:
+  trackcheckpoint:
     description: Activates mandatory hidden checkpoint for the given player.  
+    aliases: [parkourcheckpoint]
   toptimes:
     description: Allows the user to list the top times for a course.  
