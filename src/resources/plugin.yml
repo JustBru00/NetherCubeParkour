@@ -1,7 +1,7 @@
 name: EpicIceTrack
 main: com.justbru00.epic.icetrack.main.EpicIceTrack
 version: 2.0-INDEV
-authors: [JustBru00,Justin Brubaker,SethTheLasersloth]
+authors: [JustBru00, Justin Brubaker, SethTheLasersloth]
 softdepend: [HolographicDisplays]
 api-version: 1.16
 commands:
@@ -10,17 +10,17 @@ commands:
     aliases: [c]
   parkouradmin:
     description: The command for admin/test features.
-    aliases: [prkadmin] 
+    aliases: [prkadmin]
   trackstart:
     description: Starts the given course for the given player.
     aliases: [parkourstart]
   trackstop:
-    description: Ends the given course for the given player.    
+    description: Ends the given course for the given player.
     aliases: [parkourstop]
   boatkill:
-    description: Kills all boats that do not have players riding in them.  
+    description: Kills all boats that do not have players riding in them.
   trackcheckpoint:
-    description: Activates mandatory hidden checkpoint for the given player.  
+    description: Activates mandatory hidden checkpoint for the given player.
     aliases: [parkourcheckpoint]
   toptimes:
-    description: Allows the user to list the top times for a course.  
+    description: Allows the user to list the top times for a course.
