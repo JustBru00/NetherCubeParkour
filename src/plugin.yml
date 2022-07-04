@@ -8,9 +8,9 @@ commands:
   courses:
     description: Command for opening gui.
     aliases: [c]
-  parkouradmin:
+  trackadmin:
     description: The command for admin/test features.
-    aliases: [prkadmin] 
+    aliases: [prkadmin, parkouradmin, tadmin] 
   trackstart:
     description: Starts the given course for the given player.
     aliases: [parkourstart]

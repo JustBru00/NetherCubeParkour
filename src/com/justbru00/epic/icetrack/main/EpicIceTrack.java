@@ -66,7 +66,7 @@ public class EpicIceTrack extends JavaPlugin {
 		
 		// REGISTER COMMANDS
 		getCommand("courses").setExecutor(new CoursesCommand());
-		getCommand("parkouradmin").setExecutor(new ParkourAdminCommand());				
+		getCommand("trackadmin").setExecutor(new TrackAdminCommand());				
 		getCommand("trackstart").setExecutor(new TrackStartCommand());
 		getCommand("trackstop").setExecutor(new TrackStopCommand());
 		getCommand("boatkill").setExecutor(new BoatKillCommand());

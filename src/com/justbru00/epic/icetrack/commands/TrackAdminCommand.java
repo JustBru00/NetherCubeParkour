@@ -21,37 +21,37 @@ import com.justbru00.epic.icetrack.timer.PlayerTimer;
 import com.justbru00.epic.icetrack.utils.Messager;
 import com.justbru00.epic.icetrack.utils.PluginFile;
 
-public class ParkourAdminCommand implements CommandExecutor {
+public class TrackAdminCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (command.getName().equalsIgnoreCase("parkouradmin")) {
+		if (command.getName().equalsIgnoreCase("trackadmin")) {
 			
-			if (!sender.hasPermission("nethercubeparkour.parkouradmin")) {
+			if (!sender.hasPermission("nethercubeparkour.parkouradmin") || !sender.hasPermission("epicicetrack.trackadmin")) {
 				Messager.msgSender("&cYou don't have a cool enough prefix to use this command.", sender);
 				return true;
 			}
 			
 			if (args.length == 0) {
-				Messager.msgSender("&cUhh... you &omight &r&cneed to provide an argument after this command. Use /parkouradmin help for a list of arguments.", sender);
+				Messager.msgSender("&cUhh... you &omight &r&cneed to provide an argument after this command. Use /trackadmin help for a list of arguments.", sender);
 				return true;
 			}
 			
 			if (args.length >= 1) {
 				if (args[0].equalsIgnoreCase("help")) {
-					Messager.msgSender("&6/parkouradmin resetalltimes mapName", sender);
-					Messager.msgSender("&6/parkouradmin setbesttime <playerName> <mapName> <mapTimeInMilliseconds>", sender);					
-					Messager.msgSender("&6/parkouradmin resetbesttime <playerName> <mapName>", sender);					
-					Messager.msgSender("&6/parkouradmin currency <set,get,add,subtract> <playerName,UUID> (amount)", sender);
-					Messager.msgSender("&6/parkouradmin maps <list,tp> (player)", sender);
-					Messager.msgSender("&6/parkouradmin updateleaderboards", sender);
-					Messager.msgSender("&6/parkouradmin reload", sender);
+					Messager.msgSender("&6/trackadmin resetalltimes mapName", sender);
+					Messager.msgSender("&6/trackadmin setbesttime <playerName> <mapName> <mapTimeInMilliseconds>", sender);					
+					Messager.msgSender("&6/trackadmin resetbesttime <playerName> <mapName>", sender);					
+					Messager.msgSender("&6/trackadmin currency <set,get,add,subtract> <playerName,UUID> (amount)", sender);
+					Messager.msgSender("&6/trackadmin maps <list,tp> (player)", sender);
+					Messager.msgSender("&6/trackadmin updateleaderboards", sender);
+					Messager.msgSender("&6/trackadmin reload", sender);
 					return true;
 				}  else if (args[0].equalsIgnoreCase("resetalltimes")) {
-					// /parkouradmin resetalltimes <mapName>
+					// /trackadmin resetalltimes <mapName>
 					if (args.length != 2) {
-						Messager.msgSender("&cSorry you didn't provide the correct arguments. /parkouradmin resetalltimes <mapName>", sender);
+						Messager.msgSender("&cSorry you didn't provide the correct arguments. /trackadmin resetalltimes <mapName>", sender);
 						return true;
 					}
 					
@@ -72,9 +72,9 @@ public class ParkourAdminCommand implements CommandExecutor {
 					Messager.msgSender("&aReset all times for all players on the map " + map.getInternalName() + ".", sender);
 					return true;
 				} else if (args[0].equalsIgnoreCase("setbesttime")) {
-					// /parkouradmin setbesttime <playerName> <mapName> <mapTimeInMilliseconds>
+					// /trackadmin setbesttime <playerName> <mapName> <mapTimeInMilliseconds>
 					if (args.length != 4) {
-						Messager.msgSender("&cSorry you didn't provide the correct arguments. /parkouradmin setbesttime <playerName> <mapName> <mapTimeInMilliseconds>", sender);
+						Messager.msgSender("&cSorry you didn't provide the correct arguments. /trackadmin setbesttime <playerName> <mapName> <mapTimeInMilliseconds>", sender);
 						return true;
 					}
 					
@@ -119,9 +119,9 @@ public class ParkourAdminCommand implements CommandExecutor {
 					return true;					
 				} else if (args[0].equalsIgnoreCase("resetbesttime")) {
 					// ISSUE #1
-					// /parkouradmin resetbesttime <playerName> <map>
+					// /trackadmin resetbesttime <playerName> <map>
 					if (args.length != 3) {
-						Messager.msgSender("&cSorry you didn't provide the correct arguments. /parkouradmin resetbesttime <playerName> <mapName>", sender);
+						Messager.msgSender("&cSorry you didn't provide the correct arguments. /trackadmin resetbesttime <playerName> <mapName>", sender);
 						return true;
 					} 
 					
@@ -242,12 +242,12 @@ public class ParkourAdminCommand implements CommandExecutor {
 						}
 						return true;
 					} else {
-						Messager.msgSender("&cPlease provide the correct arguments. /parkouradmin currency <set,get,add,subtract> <player,UUID> (amount)", sender);
+						Messager.msgSender("&cPlease provide the correct arguments. /trackadmin currency <set,get,add,subtract> <player,UUID> (amount)", sender);
 						return true;
 					}
 					
 					} else {
-						Messager.msgSender("&cPlease provide the correct arguments. /parkouradmin currency <set,get,add,subtract> <player,UUID> (amount)", sender);
+						Messager.msgSender("&cPlease provide the correct arguments. /trackadmin currency <set,get,add,subtract> <player,UUID> (amount)", sender);
 						return true;
 					}
 						
@@ -281,20 +281,20 @@ public class ParkourAdminCommand implements CommandExecutor {
 										Messager.msgSender("&6Teleported " + target.getName() + " to the start of map " + map.getInternalName() + ".", sender);
 										return true;
 									} else {
-										Messager.msgSender("&cThat map does not exist. Get a list of maps with /parkouradmin maps list", sender);
+										Messager.msgSender("&cThat map does not exist. Get a list of maps with /trackadmin maps list", sender);
 										return true;
 									}
 								} else {
-									Messager.msgSender("&cNot enough arguments. /parkouradmin maps tp <player> <mapname>", sender);
+									Messager.msgSender("&cNot enough arguments. /trackadmin maps tp <player> <mapname>", sender);
 									return true;
 								}
 							} else {
-								Messager.msgSender("&cNot enough arguments. /parkouradmin maps tp <player> <mapname>", sender);
+								Messager.msgSender("&cNot enough arguments. /trackadmin maps tp <player> <mapname>", sender);
 								return true;
 							}
 						}
 					} else {
-						Messager.msgSender("&cNot enough arguments. /parkouradmin maps <list, tp>", sender);
+						Messager.msgSender("&cNot enough arguments. /trackadmin maps <list, tp>", sender);
 						return true;
 					}
 				} else if (args[0].equalsIgnoreCase("testgui")) {
@@ -333,7 +333,7 @@ public class ParkourAdminCommand implements CommandExecutor {
 					Migrator.migrateV1toV2();					
 					return true;
 				} else {
-					Messager.msgSender("&cSorry that the argument " + args[0] + " is not correct. Use /parkouradmin help for a list of arguments.", sender);
+					Messager.msgSender("&cSorry that the argument " + args[0] + " is not correct. Use /trackadmin help for a list of arguments.", sender);
 					return true;
 				}
 			}
