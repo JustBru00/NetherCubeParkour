@@ -1,6 +1,6 @@
 name: EpicIceTrack
 main: com.justbru00.epic.icetrack.main.EpicIceTrack
-version: 2.0-INDEV
+version: 2.0-RC1
 authors: [JustBru00,Justin Brubaker,SethTheLasersloth]
 softdepend: [HolographicDisplays]
 api-version: 1.16
