@@ -42,7 +42,7 @@ public class MapManager {
 			}
 			m.setRequiresCheckpoint(checkpoint);
 			
-			Location spawnpoint;					
+			Location spawnpoint;				
 			
 			spawnpoint = new Location(Bukkit.getWorld(c.getString(prePath + "spawnlocation.world")), c.getDouble(prePath + "spawnlocation.x"), c.getDouble(prePath + "spawnlocation.y"),
 					c.getDouble(prePath + "spawnlocation.z"), c.getInt(prePath + "spawnlocation.yaw"), c.getInt(prePath + "spawnlocation.pitch"));
