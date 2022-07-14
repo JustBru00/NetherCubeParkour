@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.justbru00.epic.icetrack.main.EpicIceTrack;
@@ -65,7 +66,7 @@ public class AsyncFlatFileManager {
 		}
 
 		// Personal Data File
-		PluginFile pdf = possiblePdf.get().getFile();
+		PluginFile pdf = possiblePdf.get().getFile();		
 
 		// If the file is empty we need to fill it with default data.
 		if (pdf.getString("lastname") == null) {
@@ -87,6 +88,7 @@ public class AsyncFlatFileManager {
 			}
 			pdf.save();
 		}
+
 	}
 
 	/**
@@ -154,6 +156,27 @@ public class AsyncFlatFileManager {
 				mapData.setBestTime(pdf.getLong("maps." + map.getInternalName() + ".b"));
 
 				playerMapData.add(mapData);
+			} else {
+				ConfigurationSection section = pdf.getConfigurationSection("maps." + map.getInternalName());
+				if (section == null) {
+					// Section doesn't exist.
+					Messager.debug("&7[AsyncFlatFileManager] Added missing map section for map " + map.getInternalName() + " in the data file " + playerUuid + ".yml");
+					pdf.set("maps." + map.getInternalName() + ".u", true);
+					pdf.set("maps." + map.getInternalName() + ".a", 0);
+					pdf.set("maps." + map.getInternalName() + ".f", 0);
+					pdf.set("maps." + map.getInternalName() + ".b", (long) -1);			
+					playerData.save();
+					
+					// Load the data for this map
+					PlayerMapData mapData = new PlayerMapData(map.getInternalName());
+
+					mapData.setUnlocked(pdf.getBoolean("maps." + map.getInternalName() + ".u"));
+					mapData.setAttempts(pdf.getInt("maps." + map.getInternalName() + ".a"));
+					mapData.setFinishes(pdf.getInt("maps." + map.getInternalName() + ".f"));
+					mapData.setBestTime(pdf.getLong("maps." + map.getInternalName() + ".b"));
+
+					playerMapData.add(mapData);
+				}
 			}
 		}
 
