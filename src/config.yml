@@ -3,7 +3,7 @@
 prefix: '&8[&bEpic&fIceTrack&8] &6'
 
 lobbylocation:
-  onjoin: true
+  onjoin: false
   world: world
   x: 0
   y: 0
@@ -31,25 +31,25 @@ leaderboards:
       - '&f{name9} &7- &e{time9}' 
       - '&f{name10} &7- &e{time10}'
     locations:
-#      examplemap:
-#        x: 0
-#        y: 0
-#        z: 0
-#        world: world
+      examplemap:
+        x: 0
+        y: 0
+        z: 0
+        world: world
 
 maps:
-#  examplemap:
-#    item:
-#      displayname: '&b&lExample Map'
-#      material: 'STONE'
-#      data: 0   
-#    creatorname: 'JustBru00'    
-#    requirescheckpoint: true   
-#    spawnlocation:
-#      x: 0
-#      y: 0
-#      z: 0
-#      yaw: 0
-#      pitch: 0
-#      world: world   
+  examplemap:
+    item:
+      displayname: '&b&lExample Map'
+      material: 'STONE'
+      data: 0   
+    creatorname: 'JustBru00'    
+    requirescheckpoint: true   
+    spawnlocation:
+      x: 0
+      y: 0
+      z: 0
+      yaw: 0
+      pitch: 0
+      world: world   
     

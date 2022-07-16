@@ -6,6 +6,7 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import com.justbru00.epic.icetrack.main.EpicIceTrack;
@@ -24,7 +25,13 @@ public class MapManager {
 	public static void init() {	
 		maps = new ArrayList<Map>();
 		FileConfiguration c = EpicIceTrack.getInstance().getConfig();
-		Set<String> mapKeys = c.getConfigurationSection("maps").getKeys(false);		
+		ConfigurationSection mapsSection = c.getConfigurationSection("maps");
+		
+		if (mapsSection == null) {
+			return;
+		}
+		
+		Set<String> mapKeys = mapsSection.getKeys(false);		
 		
 		for (String mapKey : mapKeys) {
 			Map m = new Map(mapKey);
